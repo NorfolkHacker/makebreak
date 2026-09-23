@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A screen that breathes — MAKE / BREAK</title>
+<meta name="description" content="An old-school colour-cycling plasma in ~30 lines of vanilla JavaScript. Issue zero of MAKE / BREAK.">
+<style>
+  html,body{margin:0;height:100%;background:#07080a;color:#dfe7dc;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;overflow:hidden}
+  #c{display:block;position:absolute;inset:0;width:100%;height:100%;image-rendering:auto}
+  .cap{position:fixed;left:0;bottom:0;z-index:2;padding:16px 18px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));font-size:13px;line-height:1.5;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+  .cap b{font-family:"Anton",sans-serif;letter-spacing:.05em;text-transform:uppercase;font-weight:400;font-size:16px}
+  .cap .g{color:#2bf5a0}.cap .m{color:#ff49cf}
+  .cap a{color:#2bf5a0;text-decoration:none;border-bottom:1px solid rgba(43,245,160,.4)}
+  .cap a:hover{border-bottom-color:#2bf5a0}
+  .cap .hint{color:#71806f;margin-top:6px}
+  .scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.18) 2px 3px);mix-blend-mode:multiply}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+</head>
+<body>
+<canvas id="c" width="420" height="420"></canvas>
+<div class="scan"></div>
+<div class="cap">
+  <b><span class="m">MAKE</span> / <span class="g">BREAK</span></b> · issue #00 — a screen that breathes<br>
+  ~30 lines of vanilla JS. <span class="hint">View source. Change the 0.04s. Break it.</span><br>
+  <a href="https://makebreak.co.uk">← the zine</a>
+</div>
+<script>
+// Old-school plasma. Sum some sine waves for the shape; feed the value into three
+// phase-shifted sines for colour; advance time each frame to make it cycle.
+(function(){
+  var c = document.getElementById('c'), x = c.getContext('2d');
+  var W, H, img, d, t = 0;
+  function size(){
+    // modest internal resolution (scaled up by CSS) so per-pixel stays smooth
+    var s = Math.min(window.innerWidth, window.innerHeight) > 900 ? 520 : 420;
+    W = c.width = s; H = c.height = s;
+    img = x.createImageData(W, H); d = img.data;
+  }
+  window.addEventListener('resize', size); size();
+  function frame(){
+    for (var y = 0; y < H; y++){
+      for (var px = 0; px < W; px++){
+        var v = Math.sin(px * 0.04 + t)
+              + Math.sin(y  * 0.03 - t)
+              + Math.sin((px + y) * 0.03 + t)
+              + Math.sin(Math.sqrt((px-W/2)*(px-W/2) + (y-H/2)*(y-H/2)) * 0.04 - t * 1.5);
+        var h = v * 0.6 + t * 0.2;
+        var i = (y * W + px) * 4;
+        d[i]   = 128 + 127 * Math.sin(h);
+        d[i+1] = 128 + 127 * Math.sin(h + 2.094);
+        d[i+2] = 128 + 127 * Math.sin(h + 4.188);
+        d[i+3] = 255;
+      }
+    }
+    x.putImageData(img, 0, 0);
+    t += 0.05;
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
