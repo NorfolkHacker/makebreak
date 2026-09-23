@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Issue #00 — A screen that breathes</title>
-<meta name="description" content="MAKE / BREAK issue zero: build a colour-cycling plasma in 30 lines, then drag it around live.">
+<meta name="description" content="MAKE / BREAK issue zero: this week in security, a beginner's tip, and a colour-cycling plasma you build and break live.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
@@ -33,23 +33,30 @@
   h1{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.92;letter-spacing:.01em;font-size:clamp(40px,9vw,74px);margin:0;text-wrap:balance}
   h1 .em{color:var(--break)}
   .dek{color:var(--muted);font-size:18px;margin-top:16px}
+  .toc{color:var(--muted);font-size:13px;margin-top:14px;letter-spacing:.02em}
+  .toc .sep{color:var(--faint);margin:0 8px}
   article{padding-bottom:40px}
   article p{margin:0 0 18px}
-  h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;font-size:26px;margin:40px 0 14px;color:var(--ink)}
-  h2 .n{color:var(--faint);margin-right:10px}
+  h2.seg{font-family:var(--mono);text-transform:none;font-size:20px;font-weight:700;letter-spacing:0;margin:46px 0 8px}
+  h2.seg .ph{color:var(--make)}
+  .seg-note{color:var(--muted);font-size:14px;margin:0 0 16px}
+  h2.proj{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;font-size:34px;margin:14px 0 6px;color:var(--ink)}
+  h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;font-size:22px;margin:34px 0 12px;color:var(--ink)}
+  h3 .n{color:var(--faint);margin-right:10px}
   code{background:var(--surface-2);border:1px solid var(--line);border-radius:3px;padding:1px 5px;font-size:14px;color:var(--break)}
   pre{background:#05070a;border:1px solid var(--line-strong);border-left:3px solid var(--break);border-radius:4px;padding:18px;overflow-x:auto;font-size:13.5px;line-height:1.6;margin:0 0 8px}
   pre code{background:none;border:0;padding:0;color:#cfe8d6}
   .cap{color:var(--muted);font-size:12.5px;margin:0 0 26px}
-  .toc{color:var(--muted);font-size:13px;margin-top:14px;letter-spacing:.02em}
-  .toc .sep{color:var(--faint);margin:0 8px}
-  .seg{font-family:var(--mono);text-transform:none;font-size:19px;font-weight:700;letter-spacing:0;margin:44px 0 12px}
-  .seg .ph{color:var(--make)}
-  .card{border:1px solid var(--line);border-left:3px solid var(--make);background:var(--surface);border-radius:4px;padding:16px 18px;margin:0 0 14px}
-  .card.brk{border-left-color:var(--break)}
   .strike{color:var(--muted)}.hl-make{color:var(--make);font-weight:700}.hl-break{color:var(--break);font-weight:700}
+  .card{border:1px solid var(--line);border-left:3px solid var(--break);background:var(--surface);border-radius:4px;padding:15px 18px;margin:0 0 12px}
+  .card p{margin:0}
+  .card .do{color:var(--break);font-weight:700}
+  .card .src{color:var(--faint);font-size:12px}
+  .card .src a{color:var(--muted)}
+  .tip{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--surface);border-radius:4px;padding:8px 18px;margin:0 0 12px}
+  .tip b{color:var(--amber)}
   /* live demo */
-  .demo{border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--ground);margin:8px 0 10px;box-shadow:0 30px 80px -50px rgba(0,0,0,.9)}
+  .demo{border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--ground);margin:12px 0 10px;box-shadow:0 30px 80px -50px rgba(0,0,0,.9)}
   .demo-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
   .tl{width:11px;height:11px;border-radius:50%}.tl.r{background:var(--make)}.tl.y{background:var(--amber)}.tl.g{background:var(--break)}
   .demo-title{margin-left:8px;color:var(--muted);font-size:12px}
@@ -60,8 +67,7 @@
   .knob .v{color:var(--break);font-variant-numeric:tabular-nums}
   .reset{margin:0 18px 16px;font-family:var(--mono);font-size:13px;font-weight:700;background:transparent;border:1px solid var(--line-strong);color:var(--ink);border-radius:2px;padding:9px 16px;cursor:pointer}
   .reset:hover{border-color:var(--ink)}
-  /* subscribe */
-  .sub{border-top:1px solid var(--line);margin-top:40px;padding:36px 0 60px}
+  .sub{border-top:1px solid var(--line);margin-top:44px;padding:36px 0 60px}
   .sub h3{font-family:var(--display);text-transform:uppercase;font-size:30px;margin:0 0 8px}
   .sub h3 .m{color:var(--make)}.sub h3 .b{color:var(--break)}
   .sub p{color:var(--muted);margin:0 0 18px}
@@ -78,18 +84,79 @@
 
 <header class="issue"><div class="wrap">
   <div class="kicker"><span class="badge">MAKE</span><span>issue #00</span></div>
-  <h1>A screen that <span class="em">breathes</span></h1>
-  <p class="dek">Build a colour-cycling plasma in ~30 lines — then drag it around and break it, right here on the page.</p>
-  <p class="toc">in this issue<span class="sep">→</span>the build<span class="sep">·</span>steal this<span class="sep">·</span>in the wild<span class="sep">·</span>your turn</p>
+  <h1>The one where you <span class="em">start</span></h1>
+  <p class="dek">This week's security in plain English, a beginner's tip that beats any antivirus, and a build: a plasma you make and break live on the page.</p>
+  <p class="toc">this week in security<span class="sep">·</span>beginner's corner<span class="sep">·</span>the project<span class="sep">·</span>your turn</p>
 </div></header>
 
 <article><div class="wrap">
-  <p>Welcome to MAKE / BREAK. Quick promise: every issue you make something or you break something
-  real, and you're hands-on-keys by the last line. No think-pieces. No infinite scroll. Just the
-  good part of computers — where <em>you</em> tell the machine what to do and it does it.</p>
+  <p>Welcome to MAKE / BREAK. Every other week you get three things: what actually happened in
+  security (minus the jargon), one tip if you're new to all this, and something to <em>build or
+  break</em> with your own hands. Let's go.</p>
 
-  <p>So let's warm up. This is a <strong>plasma</strong>: the colour-cycling, liquid-light effect
-  the demoscene has been showing off since the early 90s. It's alive below — poke the sliders.</p>
+  <h2 class="seg"><span class="ph">&gt;</span> this week in security</h2>
+  <p class="seg-note">Four things worth 60 seconds of your attention. Two of them you can act on right now.</p>
+
+  <div class="card">
+    <p><strong>Update your browser today — this one's being used right now.</strong> Google shipped
+    an emergency Chrome fix for a hole attackers are <em>already exploiting</em> (CVE-2026-85046).
+    The US cyber agency gave federal staff two weeks to patch it, which is government-speak for
+    "drop everything." Takes 20 seconds.</p>
+    <p><span class="do">→ do this:</span> Chrome menu → Help → About Google Chrome → let it update →
+    Relaunch. Same for Edge, Brave, Opera, Vivaldi.
+    <span class="src"><a href="https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Your phone got a big patch too.</strong> Apple just pushed its largest-ever security
+    update (260+ fixes, iOS 27) and Android's September update kills several remote-takeover bugs.
+    Boring, unglamorous, and the single highest-value thing you'll do all week.</p>
+    <p><span class="do">→ do this:</span> iPhone: Settings → General → Software Update. Android:
+    Settings → Security → Security update. Turn on automatic updates while you're there.
+    <span class="src"><a href="https://www.theregister.com/security/2026/09/15/the-vulnpocalypse-rains-ibugs-down-on-apple-with-record-setting-number-of-patches/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Careful with QR codes in the wild.</strong> Scammers are sticking fake QR codes over
+    real ones — on parking meters, restaurant tables, posters — so a scan sends you to a lookalike
+    site that grabs your card details or logins. It's phishing with a sticker.</p>
+    <p><span class="do">→ do this:</span> if the QR is clearly a sticker slapped on top, or the page
+    it opens asks you to log in or pay, back out and type the real address yourself.
+    <span class="src"><a href="https://www.mcafee.com/learn/protect-yourself-from-the-latest-online-scams/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Tell your parents about this one.</strong> A nasty scam doing the rounds starts with
+    a pop-up screaming that your bank account or computer has been "compromised", then a friendly
+    "official" talks the victim into moving their savings somewhere "safe" — sometimes literally
+    handing over cash or gold bars.</p>
+    <p><span class="do">→ do this:</span> no real bank or police force ever phones to move your
+    money to safety. Hang up. Ring the number on the back of your card. Forward this to someone who
+    needs it.
+    <span class="src"><a href="https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> beginner's corner</h2>
+  <p class="seg-note">New to all this? One skill here will protect you more than any paid antivirus:
+  smelling a phish. Three tells, ten seconds.</p>
+  <div class="tip"><p><b>1. It's rushing you.</b> "Account will be closed", "points expire today",
+  "act now". Manufactured panic is the oldest lever there is. Real companies don't threaten you into
+  clicking.</p></div>
+  <div class="tip"><p><b>2. The link doesn't match the words.</b> Hover over it on a computer, or
+  long-press on a phone, and read the actual address. If the message says <code>T-Mobile</code> but
+  the link is <code>tmobile-rewards-claim.xyz</code>, it's a fake.</p></div>
+  <div class="tip"><p><b>3. It wants you to log in <em>from the message</em>.</b> Don't. Ever. Open a
+  fresh tab and type the site's address yourself. Same rule for QR codes. That single habit beats
+  the vast majority of attacks.</p></div>
+  <p>That's the whole skill: slow down, check the link, log in yourself. You're now harder to phish
+  than most people with a security team.</p>
+
+  <h2 class="proj">The project — a screen that breathes</h2>
+  <p class="seg-note">The main event. Build a colour-cycling plasma in ~30 lines — then drag it
+  around and break it, right here.</p>
+
+  <p>This is a <strong>plasma</strong>: the colour-cycling, liquid-light effect the demoscene has
+  been showing off since the early 90s. It's alive below — poke the sliders.</p>
 
   <div class="demo">
     <div class="demo-head"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span class="demo-title">~/breathe — live, yours to wreck</span></div>
@@ -101,9 +168,9 @@
     </div>
     <button class="reset" id="reset">↺ reset</button>
   </div>
-  <p class="cap">That's ~230,000 pixels being recomputed every frame, in your browser, from three sliders. No library.</p>
+  <p class="cap">That's ~130,000 pixels recomputed every frame, in your browser, from three sliders. No library.</p>
 
-  <h2><span class="n">01</span>Make it yourself</h2>
+  <h3><span class="n">01</span>Make it yourself</h3>
   <p>Save this as <code>breathe.html</code> and open it. That's the whole thing:</p>
   <pre><code>&lt;!doctype html&gt;
 &lt;canvas id="c" width="480" height="480"&gt;&lt;/canvas&gt;
@@ -129,51 +196,32 @@ function frame(){
 frame();
 &lt;/script&gt;</code></pre>
 
-  <h2><span class="n">02</span>Why it works</h2>
+  <h3><span class="n">02</span>Why it works</h3>
   <p><span class="hl-make">The shape</span> is a sum of sine waves over <code>x</code>, <code>y</code>,
   <code>x+y</code> and distance-from-centre. Each is a ripple; stacked, they interfere into
   something organic. That last term — distance from the middle — gives the radial <em>breathing</em>.</p>
   <p><span class="hl-break">The colour</span> is the demoscene trick: take that one value and feed it
   into three sines shifted by 120° (2.094 and 4.188 radians) for R/G/B. Nudge everything by
-  <code>t</code> each frame and that's the cycling. Drag the <strong>colour spread</strong> slider
-  above to feel it.</p>
+  <code>t</code> each frame and that's the cycling. Drag <strong>colour spread</strong> to feel it.</p>
 
-  <h2><span class="n">03</span>Now break it</h2>
-  <p>Don't just run it — maul it. In the code, change the <code>0.04</code> / <code>0.03</code>
-  constants (that's the <strong>ripple</strong> slider): bigger = tighter and chaotic, smaller =
-  vast and slow. Then add a kaleidoscope fold — mirror the coordinates at the top of the loop:</p>
+  <h3><span class="n">03</span>Now break it</h3>
+  <p>Don't just run it — maul it. Change the <code>0.04</code> / <code>0.03</code> constants (the
+  <strong>ripple</strong> slider): bigger = tighter and chaotic, smaller = vast and slow. Then add a
+  kaleidoscope fold — mirror the coordinates at the top of the loop:</p>
   <pre><code>const fx = Math.abs(px - W/2), fy = Math.abs(y - H/2);
 // then use fx / fy in the waves instead of px / y</code></pre>
   <p>Instant symmetry. That's issue #01's whole world — you just previewed it.</p>
 
-  <h2 class="seg"><span class="ph">&gt;</span> steal this</h2>
-  <div class="card">
-    <p style="margin:0"><strong>Hydra</strong> — live-coding visuals in your browser, nothing to
-    install. Open <a href="https://hydra.ojack.xyz" target="_blank" rel="noopener">hydra.ojack.xyz</a>,
-    type <code>osc(20,0.1,1).rotate(0.7).out()</code>, hit Ctrl+Enter, and the whole screen becomes
-    an instrument. Best way I know to steal ideas for your own plasma — change a number, see it move.</p>
-  </div>
-
-  <h2 class="seg"><span class="ph">&gt;</span> in the wild</h2>
-  <div class="card brk">
-    <p style="margin:0"><strong>‘elevated’</strong> — a program that renders an entire snow-capped
-    mountain range, fog, and a camera flythrough… in <strong>4 kilobytes</strong>. Your last
-    screenshot is a thousand times bigger than that. It's what happens when someone treats a brutal
-    constraint as a playground. Search <em>“elevated 4k intro”</em> and watch it once — then think
-    about how much your apps weigh.</p>
-  </div>
-
   <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
   <div class="card">
-    <p style="margin:0">Make the plasma follow your mouse — feed the pointer's position into the
-    ripple, or move the centre point to wherever the cursor is. Ten minutes, tops. Reply with a
-    ten-second screen-grab and the best one runs at the <strong>top of issue #01, with your name on
-    it</strong>. Go on.</p>
+    <p>Make the plasma follow your mouse — feed the pointer's position into the ripple, or move the
+    centre point to wherever the cursor is. Ten minutes, tops. Reply with a ten-second screen-grab
+    and the best one runs at the <strong>top of issue #01, with your name on it</strong>. Go on.</p>
   </div>
 
   <div class="sub">
     <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
-    <p>One build or break like this, in your inbox, every other week. Free.</p>
+    <p>Security in plain English, a beginner tip, and one thing to build or break — every other week. Free.</p>
     <a class="cta" href="/#join">Get on the list ▚</a>
     <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
   </div>
@@ -193,7 +241,7 @@ frame();
   kScale.addEventListener('input',sync); kSpeed.addEventListener('input',sync); kHue.addEventListener('input',sync);
   document.getElementById('reset').addEventListener('click',function(){kScale.value=40;kSpeed.value=50;kHue.value=60;sync();});
   sync();
-  var s2=0.03/0.04; // keep the second constant proportional to the ripple slider
+  var s2=0.03/0.04;
   function frame(){
     var sc=P.scale, sc2=sc*s2;
     for(var y=0;y<H;y++){
