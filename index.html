@@ -121,6 +121,11 @@
   .form button{flex:none;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.03em;border:0;border-radius:2px;padding:12px 20px;cursor:pointer;background:var(--make);color:var(--ground);transition:box-shadow .15s ease,transform .08s ease}
   .form button:hover{box-shadow:0 0 0 3px rgba(255,73,207,.2);transform:translateY(-1px)}
   .msg{margin-top:14px;font-size:13.5px;color:var(--muted)}
+  .modal-backdrop{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,6,5,.72)}
+  .modal-term{max-width:460px;width:100%}
+  .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  @media (prefers-reduced-motion: no-preference){.modal-term{animation:pop .18s ease-out}}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
   footer{border-top:1px solid var(--line);padding-block:40px 56px;color:var(--muted);font-size:13px}
   footer .big{font-family:var(--display);text-transform:uppercase;color:var(--ink);font-size:clamp(30px,7vw,58px);letter-spacing:.03em;line-height:.95;margin:0 0 20px}
   footer .big .make{color:var(--make)} footer .big .break{color:var(--break)}
@@ -208,44 +213,75 @@
   <h2>Get off the feed.<br><span class="make">Come</span> <span class="break">build.</span></h2>
   <p class="sub">Leave your email and I'll send you issue zero the moment it's done (assuming nothing shinier distracts me first). One click to leave whenever — no spam, and none of those "we're so sad to see you go" guilt-trip emails. And if someone you know is rotting in the scroll, drag them in with you.</p>
 
-  <!-- Signup form, wired to Web3Forms and LIVE. Submissions land in the Norfolk Hacker's inbox.
-       To change where they go, swap the access key on the KEY line in the script below. -->
-  <form class="form" id="joinForm" novalidate>
-    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <!-- Signup form, wired to Kit (ConvertKit) form #9954036. Subscribers land in your Kit list;
+       write each issue in Kit and hit Broadcast to send it. Field name is email_address (Kit's). -->
+  <form class="form" id="joinForm" action="https://app.kit.com/forms/9954036/subscriptions" method="post" novalidate>
     <div class="form-row">
       <span class="p">&gt;</span>
-      <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required placeholder="you@machine.local" aria-label="Email address" />
+      <input id="email" name="email_address" type="email" inputmode="email" autocomplete="email" required placeholder="you@machine.local" aria-label="Email address" />
       <button type="submit" id="joinBtn">Enlist ▚</button>
     </div>
     <div class="msg" id="msg" role="status" aria-live="polite">No spam, no slop. Unsubscribe in one click.</div>
   </form>
+
+  <div class="modal-backdrop" id="joinModal" hidden>
+    <div class="term modal-term" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <div class="term-head">
+        <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
+        <span class="term-title">~/welcome</span>
+      </div>
+      <div class="term-body">
+        <p class="lead" id="mTitle" style="margin-bottom:14px"><span class="prompt">&gt;</span> <span class="gp">you're on the list.</span><span class="cursor" style="height:.8em"></span></p>
+        <p class="c" style="margin-bottom:6px">Issue zero drops in your inbox the moment it's done. If Kit emails you a confirm link first, tap it — takes a second.</p>
+        <p style="margin:18px 0 12px"># know someone rotting in the scroll? drag them in:</p>
+        <div class="modal-actions">
+          <button type="button" class="btn" id="mCopy">Copy the link</button>
+          <button type="button" class="btn ghost" id="mClose">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script>
   (function(){
-    var KEY = "aed51ebf-bc20-486d-ad68-e6a4f33f8979"; // Web3Forms access key
+    var FORM = "https://app.kit.com/forms/9954036/subscriptions";
+    var SITE = "https://makebreak.co.uk";
     var f = document.getElementById('joinForm'),
         b = document.getElementById('joinBtn'),
         m = document.getElementById('msg'),
-        e = document.getElementById('email');
-    function ok(t){ m.textContent = t; m.style.color = "var(--break)"; }
-    function er(t){ m.textContent = t; m.style.color = "var(--amber)"; }
+        e = document.getElementById('email'),
+        modal = document.getElementById('joinModal'),
+        mClose = document.getElementById('mClose'),
+        mCopy = document.getElementById('mCopy');
     function info(t){ m.textContent = t; m.style.color = "var(--muted)"; }
+    function er(t){ m.textContent = t; m.style.color = "var(--amber)"; }
+    function openModal(){ modal.hidden = false; document.body.style.overflow = 'hidden'; if(mClose) mClose.focus(); }
+    function closeModal(){ modal.hidden = true; document.body.style.overflow = ''; }
+    if(mClose) mClose.addEventListener('click', closeModal);
+    if(modal) modal.addEventListener('click', function(ev){ if(ev.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape' && modal && !modal.hidden) closeModal(); });
+    if(mCopy) mCopy.addEventListener('click', async function(){
+      function done(){ mCopy.textContent = "Copied ✓"; setTimeout(function(){ mCopy.textContent = "Copy the link"; }, 1800); }
+      try { await navigator.clipboard.writeText(SITE); done(); }
+      catch(_){
+        var t = document.createElement('input'); t.value = SITE; document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); done(); } catch(__){ mCopy.textContent = SITE; }
+        document.body.removeChild(t);
+      }
+    });
     f.addEventListener('submit', async function(ev){
       ev.preventDefault();
       var email = (e.value || '').trim();
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ er("That doesn't look like an email. Try again."); e.focus(); return; }
-      if(KEY.indexOf("YOUR_") === 0){ er("Signups open in a moment — the list isn't wired up yet."); return; }
       b.disabled = true; info("Enlisting…");
       try{
-        var r = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
-          body: JSON.stringify({ access_key: KEY, email: email, subject: "New MAKE / BREAK subscriber", from_name: "MAKE / BREAK" })
-        });
-        var j = await r.json();
-        if(j.success){ e.value = ''; ok("You're on the list. Now go make or break something today. ✦"); }
-        else { er("Couldn't save that just now — try once more?"); }
-      } catch(_){ er("Network hiccup — give it a second and hit enlist again."); }
-      finally { b.disabled = false; }
+        var fd = new FormData(); fd.append('email_address', email);
+        var r = await fetch(FORM, { method: "POST", headers: { "Accept": "application/json" }, body: fd });
+        var j = null; try { j = await r.json(); } catch(_){}
+        if(r.ok && (!j || j.status !== 'error')){ e.value = ''; info("No spam, no slop. Unsubscribe in one click."); openModal(); }
+        else { er("Hmm, that didn't take — give it another go?"); }
+      } catch(_){
+        f.submit(); return; // CORS/offline fallback: plain POST lands on Kit's own confirmation page
+      } finally { b.disabled = false; }
     });
   })();
   </script>
