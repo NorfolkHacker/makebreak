@@ -102,7 +102,15 @@
   .move li:first-child{border-top:0}
   .move.make li .m{color:rgba(255,73,207,.6)} .move.break li .m{color:rgba(43,245,160,.6)}
   .issues{display:flex;flex-direction:column;gap:14px}
-  .issue{display:grid;grid-template-columns:88px 1fr auto;gap:18px;align-items:center;border:1px solid var(--line);border-left:3px solid var(--faint);background:var(--surface);padding:16px 18px;border-radius:3px}
+  .issue{display:grid;grid-template-columns:88px 1fr auto;gap:18px;align-items:center;border:1px solid var(--line);border-left:3px solid var(--faint);background:var(--surface);padding:16px 18px;border-radius:3px;transition:background .12s,border-color .12s}
+  .issues a{text-decoration:none;color:inherit;display:block}
+  .issues a:hover .issue{background:var(--surface-2);border-left-color:var(--ink)}
+  .fmt{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 26px}
+  .fmt .f{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:14px 16px}
+  .fmt .f b{display:block;font-family:var(--mono);font-size:13px;color:var(--break);margin-bottom:5px}
+  .fmt .f.mk b{color:var(--make)}
+  .fmt .f span{color:var(--muted);font-size:12.5px;line-height:1.5}
+  @media (max-width:640px){.fmt{grid-template-columns:1fr}}
   .issue.make{border-left-color:var(--make)} .issue.break{border-left-color:var(--break)}
   .issue .no{font-family:var(--display);font-size:30px;color:var(--faint)}
   .issue .ti{font-size:16px;color:var(--ink)} .issue .de{color:var(--muted);font-size:13px;margin-top:3px}
@@ -198,14 +206,20 @@
 </div></section>
 
 <section><div class="wrap">
-  <p class="sec-eyebrow">// what lands in your inbox</p>
-  <div class="issues">
-    <div class="issue break"><div class="no">00</div><div><div class="ti">Recon that isn't a checklist</div><div class="de">One target, start to finish — how a chain of small findings becomes a real one.</div></div><div class="badge">break</div></div>
-    <div class="issue make"><div class="no">01</div><div><div class="ti">A screen that breathes in 40 lines</div><div class="de">Build a colour-cycling kaleidoscope from nothing. Copy, run, then wreck it your way.</div></div><div class="badge">make</div></div>
-    <div class="issue break"><div class="no">02</div><div><div class="ti">SSRF, from "huh?" to metadata</div><div class="de">Walk a disclosed report line by line, then the payload that proves it out-of-band.</div></div><div class="badge">break</div></div>
-    <div class="issue make"><div class="no">03</div><div><div class="ti">Make Pure Data scream</div><div class="de">A generative sequencer that never repeats — and why that's more fun than any playlist.</div></div><div class="badge">make</div></div>
+  <p class="sec-eyebrow">// every issue, three things</p>
+  <div class="fmt">
+    <div class="f"><b>this week in security</b><span>The stuff that matters, minus the jargon — and what to actually do about it.</span></div>
+    <div class="f mk"><b>beginner's corner</b><span>One tip that makes you genuinely harder to hack. Start from zero.</span></div>
+    <div class="f"><b>the project</b><span>One thing to build or break, with your own hands, by the last line.</span></div>
   </div>
-  <p style="color:var(--muted);font-size:13px;margin-top:18px;">Free, every other week. There'll be a paid tier eventually for the deep stuff — full source, the OS guts, whole hunts start to finish — but the habit stays free. Always.</p>
+  <p class="sec-eyebrow" style="margin-top:2px">// issues so far</p>
+  <div class="issues">
+    <a href="/issues/00.html"><div class="issue make"><div class="no">00</div><div><div class="ti">A screen that breathes</div><div class="de">Build a colour-cycling plasma in ~30 lines — then drag it around live.</div></div><div class="badge">make</div></div></a>
+    <a href="/issues/01.html"><div class="issue make"><div class="no">01</div><div><div class="ti">Fold the light</div><div class="de">Turn the plasma into a kaleidoscope. One line does the whole trick.</div></div><div class="badge">make</div></div></a>
+    <a href="/issues/02.html"><div class="issue break"><div class="no">02</div><div><div class="ti">Recon that isn't a checklist</div><div class="de">How real bug-hunting starts: by looking, not by running ten tools.</div></div><div class="badge">break</div></div></a>
+    <a href="/issues/03.html"><div class="issue make"><div class="no">03</div><div><div class="ti">Make Pure Data scream</div><div class="de">A sequencer that plays itself and never repeats. Hear it, then build it.</div></div><div class="badge">make</div></div></a>
+  </div>
+  <p style="color:var(--muted);font-size:13px;margin-top:18px;"><a href="/issues/00.html" style="color:var(--break)">Read issue #00 free →</a> &nbsp;·&nbsp; <a href="/issues/" style="color:var(--muted)">browse all issues</a> &nbsp;·&nbsp; Free, every other week; a paid tier later for the deep stuff, but the habit stays free.</p>
 </div></section>
 
 <section id="join" class="join"><div class="wrap">

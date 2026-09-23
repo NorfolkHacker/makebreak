@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue #03 — Make Pure Data scream</title>
+<meta name="description" content="MAKE / BREAK #03: this week in security, a 30-second breach check, and a generative sequencer in Pure Data you can hear and download.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="issue.css">
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><span class="b">MAKE</span> <span style="color:var(--faint)">/</span> <span class="s">BREAK</span></a>
+  <span class="barmeta">issue #03 · every other week</span>
+</div></div>
+
+<header class="issue"><div class="wrap">
+  <div class="kicker"><span class="badge">MAKE</span><span>issue #03</span></div>
+  <h1>Make Pure Data <span class="emk">scream</span></h1>
+  <p class="dek">This week's security in plain English, a 30-second check to see if you've already been breached, and the project: a little machine that plays music and never repeats itself.</p>
+  <p class="toc">this week in security<span class="sep">·</span>beginner's corner<span class="sep">·</span>the project<span class="sep">·</span>your turn</p>
+</div></header>
+
+<article><div class="wrap">
+  <p>Back to making. The news, a tip, then we build an instrument that plays itself — and you can hear
+  it right here before you build a thing.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> this week in security</h2>
+  <p class="seg-note">Three quick ones — the theme is "things that look legit but aren't."</p>
+
+  <div class="card">
+    <p><strong>Fake online shops, by the hundred thousand.</strong> Researchers counted well over
+    100,000 scam storefronts — polished, convincing, and built to take your card details and ship you
+    nothing. They rank in search and run real-looking ads.</p>
+    <p><span class="do">→ do this:</span> before buying from a shop you don't know, search "<em>[shop
+    name] scam</em>", check the domain age, and pay with a method that fights back (credit card or
+    PayPal), never a bank transfer.
+    <span class="src"><a href="https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Phishing pages are now built with legit browser tools.</strong> Attackers are using
+    ordinary web-dev tricks to spin up convincing fake logins fast. Translation: "it looks
+    professional" is worth nothing as a safety signal.</p>
+    <p><span class="do">→ do this:</span> same golden rule as ever — trust the address bar, not the
+    look. If the domain isn't exactly right, don't type your password.
+    <span class="src"><a href="https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Good news for once: passwordless is spreading.</strong> More big services now let you
+    sign in with a passkey — no password to steal, no code to phish. The tech that actually fixes this
+    stuff is finally becoming normal.</p>
+    <p><span class="do">→ do this:</span> next time a site offers "set up a passkey", say yes. Future
+    you will thank present you.
+    <span class="src"><a href="https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> beginner's corner</h2>
+  <p class="seg-note">Want to know if any of these breaches already caught you? There's a free, trusted
+  site for exactly that — and it takes 30 seconds.</p>
+  <div class="tip"><p><b>Check haveibeenpwned.com.</b> Type your email; it tells you which known
+  breaches it has turned up in. It's run by a respected security researcher and doesn't store what you
+  type. Not spooky magic — just a searchable index of public breach data.</p></div>
+  <div class="tip"><p><b>For every breach it lists, change that password</b> (to a unique one from your
+  password manager) and turn on 2FA. Bonus: turn on its "notify me" feature so you hear about future
+  breaches early.</p></div>
+  <p>Knowing beats guessing. Check it, fix what it flags, move on with your day.</p>
+
+  <h2 class="proj">The project — make Pure Data scream</h2>
+  <p class="seg-note">A generative step sequencer: about a dozen boxes, and it improvises forever
+  without repeating. Here's six seconds of it, rendered from the exact patch below:</p>
+
+  <div class="demo">
+    <div class="demo-head"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span class="demo-title">~/makebreak-seq.pd — press play</span></div>
+    <audio controls preload="none" src="seq.wav">Your browser can't play this — <a href="seq.wav">download the clip</a>.</audio>
+  </div>
+  <a class="dl" href="/patches/makebreak-seq.pd" download>↓ download the finished patch (.pd)</a>
+  <p class="cap">Grab <a href="https://puredata.info" target="_blank" rel="noopener">Pure Data</a> (free),
+  open the patch, tick Media → DSP, click the toggle. Or build it yourself below — you should.</p>
+
+  <h3><span class="n">01</span>The engine</h3>
+  <p>Three ideas do all the work: a <strong>clock</strong>, a <strong>coin-flip</strong> so it isn't a
+  rigid loop, and a <strong>scale</strong> so every random note still sounds right.</p>
+  <pre><code>[tgl] -> [metro 320]          a bang every 320ms (your tempo)
+[metro 320] -> [random 100] -> [moses 22]   ~22% of steps stay silent
+[moses 22] (right) -> [t b b]               fires right, then left</code></pre>
+  <p><code>moses 22</code> sends numbers under 22 out the left, 22-and-up out the right. We act only on
+  the right — so roughly a fifth of steps rest. That single coin-flip is what stops it sounding
+  mechanical.</p>
+
+  <h3><span class="n">02</span>A note that's always in key</h3>
+  <pre><code>[t b b] (right) -> [random 5] -> [tabread mb_scale] -> [+ 50] -> [mtof] -> [osc~]</code></pre>
+  <p><code>mb_scale</code> is a little array holding the <strong>minor pentatonic</strong>
+  (<code>0 3 5 7 10</code>). A pentatonic has no wrong notes — so however the randomness jumps, it
+  always sounds musical. Constrain the randomness to a scale: that's the whole secret to "generative
+  but not annoying".</p>
+
+  <h3><span class="n">03</span>The pluck, and staying out of the red</h3>
+  <pre><code>[t b b] (left) -> [0.8 5, 0 200 5(  -> [vline~]      a fast pluck envelope
+[osc~] x [vline~] -> [*~] -> [*~ 0.35] -> [clip~ -0.95 0.95] -> [dac~]</code></pre>
+  <p>Multiply the tone by the envelope to get a plucked note; a gentle master gain and a
+  <code>clip~</code> safety net keep it from distorting. Tick DSP, click the toggle, and it starts
+  improvising.</p>
+
+  <h3><span class="n">04</span>Now break it</h3>
+  <p>Smaller <code>metro</code> = faster. Bigger <code>moses</code> = sparser and more spacious. Swap
+  the scale to harmonic minor (<code>0 2 3 5 7 8 11</code>, and bump <code>random 5</code> to
+  <code>random 7</code>) for a whole new mood. Feeling brave? Pd seeds its randomness the same each
+  launch, so the "song" repeats between sessions — seed it from the clock and it never will.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
+  <div class="card">
+    <p>Give it a second voice — a low drone or a bass note on every fourth step (hint: a second
+    counter and <code>select 0</code>). Record ten seconds of your version and reply; the best one
+    opens issue #04.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
+    <p>Security in plain English, a beginner tip, and one thing to build or break — every other week. Free.</p>
+    <a class="cta" href="/#join">Get on the list ▚</a>
+    <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
+  </div>
+
+  <nav class="foot-nav"><a href="02.html">← #02 Recon that isn't a checklist</a><a href="/issues/">all issues</a></nav>
+</div></article>
+</body>
+</html>

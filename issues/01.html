@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue #01 — Fold the light</title>
+<meta name="description" content="MAKE / BREAK #01: this week in security, a password-manager primer, and a kaleidoscope you fold live on the page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="issue.css">
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><span class="b">MAKE</span> <span style="color:var(--faint)">/</span> <span class="s">BREAK</span></a>
+  <span class="barmeta">issue #01 · every other week</span>
+</div></div>
+
+<header class="issue"><div class="wrap">
+  <div class="kicker"><span class="badge">MAKE</span><span>issue #01</span></div>
+  <h1>Fold the <span class="emk">light</span></h1>
+  <p class="dek">This week's security in plain English, a two-minute fix that stops the most common way people get hacked, and a build: turn last issue's plasma into a living kaleidoscope.</p>
+  <p class="toc">this week in security<span class="sep">·</span>beginner's corner<span class="sep">·</span>the project<span class="sep">·</span>your turn</p>
+</div></header>
+
+<article><div class="wrap">
+  <p>Back again. Same deal every other week: what happened in security without the jargon, one thing
+  to learn if you're new, and one thing to make or break. Today we bend last issue's plasma into a
+  mandala — but first, the news.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> this week in security</h2>
+  <p class="seg-note">Three worth knowing. One of them is why the beginner's tip below matters.</p>
+
+  <div class="card">
+    <p><strong>153 million driving-licence scans turned up for sale.</strong> A firm that handles ID
+    verification (IDScan) had a breach, and a dark-web service is now hawking scans of licences from
+    across the US and Canada — names, licence numbers, the lot. This is the raw material for identity
+    theft.</p>
+    <p><span class="do">→ do this:</span> if that could include you, freezing your credit with the big
+    bureaus is the single strongest move — it's free and stops crooks opening accounts in your name.
+    And be extra suspicious of "verify your identity" messages for a while.
+    <span class="src"><a href="https://www.techrepublic.com/article/news-biggest-data-breaches-2026-ranked-impact/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>That "T-Mobile reward" text is a trap.</strong> A big phishing wave is using fake
+    reward points and "they expire today!" pressure to get people tapping a dodgy link. Doesn't have
+    to be T-Mobile — the trick is the same everywhere: a prize plus a deadline.</p>
+    <p><span class="do">→ do this:</span> never claim a reward from a link in a text. If you think it
+    might be real, open the company's actual app and check there.
+    <span class="src"><a href="https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>The scams sound human now.</strong> AI is stripping the old giveaways out of scam
+    messages — no more broken English or weird formatting — and even cloning voices from a few
+    seconds of audio. "It sounded exactly like my daughter" is now a sentence real people say.</p>
+    <p><span class="do">→ do this:</span> agree a family "safe word" for genuine emergencies, and if a
+    call asking for money or codes feels off, hang up and call the person back on their known number.
+    <span class="src"><a href="https://www.mcafee.com/learn/protect-yourself-from-the-latest-online-scams/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> beginner's corner</h2>
+  <p class="seg-note">Why do breaches like the one above hurt so much? Because most people reuse the
+  same password everywhere — so one leaked password unlocks a dozen accounts. The fix is one habit.</p>
+  <div class="tip"><p><b>Get a password manager.</b> Bitwarden (free, open-source) or your phone's
+  built-in one. It invents a long random password for every site and remembers them all, so you
+  don't. You memorise <em>one</em> strong master password and nothing else.</p></div>
+  <div class="tip"><p><b>Then turn on two-factor (2FA)</b> for email and banking at least. Even if a
+  password leaks, the attacker still can't get in. Prefer an app or a passkey over text-message codes.</p></div>
+  <p>Do those two things this week and you've closed the door that most break-ins walk through. That's
+  the whole tip.</p>
+
+  <h2 class="proj">The project — fold the light</h2>
+  <p class="seg-note">Last issue you made a plasma. Today we fold it into a kaleidoscope — and the
+  whole trick is one line. Drag the petals.</p>
+
+  <div class="demo">
+    <div class="demo-head"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span class="demo-title">~/kaleido — turn the petals up</span></div>
+    <canvas id="c" width="360" height="360"></canvas>
+    <div class="knobs">
+      <div class="knob"><label>petals <span class="v" id="vSeg">6</span></label><input id="kSeg" type="range" min="3" max="12" value="6"></div>
+      <div class="knob"><label>spin <span class="v" id="vSpeed">0.030</span></label><input id="kSpeed" type="range" min="0" max="70" value="30"></div>
+      <div class="knob"><label>colour spread <span class="v" id="vHue">0.70</span></label><input id="kHue" type="range" min="20" max="130" value="70"></div>
+    </div>
+    <button class="reset" id="reset">↺ reset</button>
+  </div>
+  <p class="cap">Same plasma as issue #00 — just folded into wedges. Set petals to 3, then 12.</p>
+
+  <h3><span class="n">01</span>The one idea</h3>
+  <p>Take any messy pattern, fold it around the centre, and your eye reads order where there was
+  none. That's a kaleidoscope. The fold is literally one line — you convert each pixel to an angle
+  and mirror it into <code>N</code> wedges:</p>
+  <pre><code>const seg = (Math.PI*2) / PETALS;
+let ang = Math.atan2(dy, dx);
+ang = Math.abs(((ang % seg) + seg) % seg - seg/2);  // ← the whole trick</code></pre>
+  <p>Everything six wedges see is now the <em>same</em> folded angle, so the pattern reflects around
+  the circle. Change <code>PETALS</code> and you change the flower. Everything else — the plasma, the
+  colours — is just <em>what</em> you're folding.</p>
+
+  <h3><span class="n">02</span>Now break it</h3>
+  <p>Kill the spin for a still mandala. Warp the radius (<code>Math.sqrt(rad)*0.3</code>) and it feels
+  like falling in. Then the real prize: drive the petals or the speed from your microphone's volume
+  and it dances to music — a Virtual Light Machine in embryo, which is exactly where Jeff Minter took
+  this idea. That's your turn.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
+  <div class="card">
+    <p>Make it react to sound. Grab the mic with <code>getUserMedia</code>, read the volume with an
+    <code>AnalyserNode</code>, and feed the bass into <code>petals</code> or <code>spin</code>. Point
+    it at a track and film ten seconds — best one leads issue #02, with your name on it.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
+    <p>Security in plain English, a beginner tip, and one thing to build or break — every other week. Free.</p>
+    <a class="cta" href="/#join">Get on the list ▚</a>
+    <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
+  </div>
+
+  <nav class="foot-nav"><a href="00.html">← #00 A screen that breathes</a><a href="/issues/">all issues</a></nav>
+</div></article>
+
+<script>
+(function(){
+  var c=document.getElementById('c'), x=c.getContext('2d');
+  var W=c.width,H=c.height,img=x.createImageData(W,H),d=img.data,t=0;
+  var P={seg:6,speed:0.030,hue:0.70};
+  var kSeg=document.getElementById('kSeg'),kSpeed=document.getElementById('kSpeed'),kHue=document.getElementById('kHue');
+  var vSeg=document.getElementById('vSeg'),vSpeed=document.getElementById('vSpeed'),vHue=document.getElementById('vHue');
+  function sync(){
+    P.seg=+kSeg.value; P.speed=(+kSpeed.value)/1000; P.hue=(+kHue.value)/100;
+    vSeg.textContent=P.seg; vSpeed.textContent=P.speed.toFixed(3); vHue.textContent=P.hue.toFixed(2);
+  }
+  kSeg.addEventListener('input',sync);kSpeed.addEventListener('input',sync);kHue.addEventListener('input',sync);
+  document.getElementById('reset').addEventListener('click',function(){kSeg.value=6;kSpeed.value=30;kHue.value=70;sync();});
+  sync();
+  function frame(){
+    var seg=(Math.PI*2)/P.seg, cx=W/2, cy=H/2;
+    for(var y=0;y<H;y++){
+      for(var px=0;px<W;px++){
+        var dx=px-cx, dy=y-cy;
+        var ang=Math.atan2(dy,dx), rad=Math.sqrt(dx*dx+dy*dy);
+        ang=Math.abs(((ang%seg)+seg)%seg - seg/2) + t*0.2;
+        var sx=Math.cos(ang)*rad, sy=Math.sin(ang)*rad;
+        var v=Math.sin(sx*0.05 + t)+Math.sin(rad*0.04 - t*1.5)+Math.sin((sx+sy)*0.04 + t);
+        var h=v*P.hue + t*0.3, i=(y*W+px)*4;
+        d[i]=128+127*Math.sin(h); d[i+1]=128+127*Math.sin(h+2.094);
+        d[i+2]=128+127*Math.sin(h+4.188); d[i+3]=255;
+      }
+    }
+    x.putImageData(img,0,0); t+=P.speed; requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>

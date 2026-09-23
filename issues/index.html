@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The archive — MAKE / BREAK</title>
+<meta name="description" content="Every issue of MAKE / BREAK — security in plain English, a beginner's tip, and one thing to build or break.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="issue.css">
+<style>
+  .list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+  .list a{text-decoration:none;color:inherit}
+  .row{display:grid;grid-template-columns:70px 1fr auto;gap:16px;align-items:center;border:1px solid var(--line);border-left:3px solid var(--faint);background:var(--surface);padding:16px 18px;border-radius:3px;transition:background .12s,border-color .12s}
+  .row.make{border-left-color:var(--make)}.row.brk{border-left-color:var(--break)}
+  .list a:hover .row{background:var(--surface-2);border-left-color:var(--ink)}
+  .row .no{font-family:var(--display);font-size:26px;color:var(--faint)}
+  .row .ti{font-size:16px;color:var(--ink)}.row .de{color:var(--muted);font-size:13px;margin-top:3px}
+  .row .badge{font-size:11px;letter-spacing:.14em;padding:4px 9px;border-radius:2px;border:1px solid var(--line-strong);white-space:nowrap}
+  .row.make .badge{color:var(--make);border-color:rgba(255,73,207,.4)}
+  .row.brk .badge{color:var(--break);border-color:rgba(43,245,160,.4)}
+  @media (max-width:600px){.row{grid-template-columns:48px 1fr}.row .badge{grid-column:2;justify-self:start;margin-top:2px}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><span class="b">MAKE</span> <span style="color:var(--faint)">/</span> <span class="s">BREAK</span></a>
+  <span class="barmeta">the archive</span>
+</div></div>
+
+<header class="issue"><div class="wrap">
+  <h1>The <span class="em">archive</span></h1>
+  <p class="dek">Every issue: this week's security in plain English, a beginner's tip, and one thing to build or break. Free, every other week.</p>
+</div></header>
+
+<article><div class="wrap">
+  <div class="list">
+    <a href="03.html"><div class="row make"><div class="no">03</div><div><div class="ti">Make Pure Data scream</div><div class="de">A sequencer that plays itself and never repeats. Hear it, then build it.</div></div><div class="badge">make</div></div></a>
+    <a href="02.html"><div class="row brk"><div class="no">02</div><div><div class="ti">Recon that isn't a checklist</div><div class="de">How real bug-hunting starts: by looking, not by running ten tools.</div></div><div class="badge">break</div></div></a>
+    <a href="01.html"><div class="row make"><div class="no">01</div><div><div class="ti">Fold the light</div><div class="de">Turn the plasma into a kaleidoscope. One line does the whole trick.</div></div><div class="badge">make</div></div></a>
+    <a href="00.html"><div class="row make"><div class="no">00</div><div><div class="ti">A screen that breathes</div><div class="de">Build a colour-cycling plasma in ~30 lines — then drag it around live.</div></div><div class="badge">make</div></div></a>
+  </div>
+
+  <div class="sub">
+    <h3>Don't miss the next one.</h3>
+    <p>One build or break, plus the week's security in plain English — in your inbox, every other week. Free.</p>
+    <a class="cta" href="/#join">Get on the list ▚</a>
+    <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
+  </div>
+</div></article>
+</body>
+</html>

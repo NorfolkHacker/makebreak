@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue #02 — Recon that isn't a checklist</title>
+<meta name="description" content="MAKE / BREAK #02: this week in security, a two-minute account-security upgrade, and how real recon actually finds bugs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="issue.css">
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><span class="b">MAKE</span> <span style="color:var(--faint)">/</span> <span class="s">BREAK</span></a>
+  <span class="barmeta">issue #02 · every other week</span>
+</div></div>
+
+<header class="issue"><div class="wrap">
+  <div class="kicker"><span class="badge brk">BREAK</span><span>issue #02</span></div>
+  <h1>Recon that isn't a <span class="em">checklist</span></h1>
+  <p class="dek">This week's security in plain English, the account upgrade that kills most phishing dead, and the project: how real bug-hunting starts — by looking, not by running ten tools.</p>
+  <p class="toc">this week in security<span class="sep">·</span>beginner's corner<span class="sep">·</span>the project<span class="sep">·</span>your turn</p>
+</div></header>
+
+<article><div class="wrap">
+  <p>We're switching hats this issue — from making to breaking. Same rhythm: the news, a tip, then
+  the main event. And a rule that never bends below: <strong>only ever test things you're allowed to
+  test</strong> — a bug-bounty target in scope, or your own kit. No permission, no poking.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> this week in security</h2>
+  <p class="seg-note">Three that matter — and the first is exactly why this week's tip is what it is.</p>
+
+  <div class="card">
+    <p><strong>Attackers are tricking people into approving <em>their</em> login.</strong> There's
+    been a roughly 15× jump this year in "authorise this device" scams: you get a real-looking
+    sign-in prompt, tap approve to make it go away, and you've just let a stranger into your account —
+    even with 2FA on.</p>
+    <p><span class="do">→ do this:</span> never approve a login prompt you didn't personally start. If
+    one appears out of nowhere, someone has your password — go change it.
+    <span class="src"><a href="https://www.blackarrowcyber.com/blog/threat-briefing-11-september-2026" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Phishing that hides behind Google.</strong> A slick campaign bounces victims through
+    six real Google services before dropping them on a fake login — so it sails past spam filters and
+    the early links all look legit. The lesson: a trustworthy-looking first hop means nothing.</p>
+    <p><span class="do">→ do this:</span> judge the page where you actually type your password, not the
+    link you clicked. Wrong domain in the address bar = leave.
+    <span class="src"><a href="https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Android's monthly patch is a big one.</strong> September's update fixes a pile of flaws
+    including some that let an attacker run code on your phone remotely. Nothing for you to do but the
+    usual — but the usual really matters here.</p>
+    <p><span class="do">→ do this:</span> Settings → Security → check for a security update. Aim for
+    patch level 2026-09-05 or later.
+    <span class="src"><a href="https://securityonline.info/android-security-vulnerabilities-patch/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> beginner's corner</h2>
+  <p class="seg-note">The device-approval scam above works because text-message and tap-to-approve 2FA
+  can be socially engineered. There's a version that basically can't be: passkeys.</p>
+  <div class="tip"><p><b>Turn on passkeys where they're offered</b> (Google, Apple, Microsoft, PayPal,
+  and more). A passkey lives on your phone or laptop and proves it's really you with your fingerprint
+  or face — there's no code to read out and nothing to phish. It literally won't work on a fake site.</p></div>
+  <div class="tip"><p><b>Keep an authenticator app as backup</b> (not SMS). Codes from an app beat codes
+  from a text, which can be intercepted or SIM-swapped.</p></div>
+  <p>Passkey where you can, app-based codes where you can't, SMS only as a last resort. That ordering
+  is the whole lesson.</p>
+
+  <h2 class="proj">The project — recon that isn't a checklist</h2>
+  <p class="seg-note">Everyone runs the same ten tools. Almost nobody <em>looks</em>. This is about
+  looking — on a target you're authorised to test.</p>
+
+  <p>The myth of recon is that it's a tool pipeline: fire the scanners, read the output, profit.
+  That's not recon, it's a smoke alarm — it tells you what a thousand other people's alarms already
+  told them. The bugs that pay live in the 10% a scanner can't see, because they're not a signature.
+  They're a <em>contradiction</em> you notice by paying attention.</p>
+
+  <h3><span class="n">01</span>The model</h3>
+  <p>Every app is a frozen snapshot of a team's assumptions. A bug is almost always where two of those
+  assumptions disagree. So your whole job in recon is to <strong>reconstruct what the developers
+  believed</strong>, so you can find where those beliefs collide:</p>
+  <div class="card brk"><p>"Nobody will change this hidden field." · "This endpoint is only ever called
+  by our own app." · "That old subdomain is switched off." · "This ID is random enough that you can't
+  guess someone else's."</p></div>
+  <p>Recon that finds bugs isn't "more hosts." It's <em>more of the team's assumptions, written down.</em></p>
+
+  <h3><span class="n">02</span>The loop</h3>
+  <p><span class="hl-break">Enumerate, then read it like a story.</span> Run your subdomain tools, sure
+  — but don't grep for scanner hits, <em>read the names</em>. <code>staging.</code>, <code>dev.</code>,
+  <code>legacy.</code>, <code>api-v1.</code>, a dead brand. Each is an assumption ("this isn't public /
+  isn't used / is forgotten"). The forgotten ones are where old auth and old code live.</p>
+  <p><span class="hl-break">Watch the app use itself.</span> Open the real product with your proxy on
+  and just <em>use it</em> for ten minutes — sign up, change a setting, invite a teammate. You're
+  recording its vocabulary: the endpoints, the IDs, the shape of its objects. 80% of real findings
+  start here, and no scanner does it.</p>
+  <p><span class="hl-break">Diff the two pictures.</span> Cross the map against the behaviour. The gold
+  is in the mismatches: a client that sends <code>role: "user"</code> (what if you send
+  <code>"admin"</code>?), a numeric <code>?id=8143</code> (is 8142 someone else's?), a staging box
+  running the same API as prod but an older build.</p>
+  <p><span class="hl-break">Write each assumption as a testable sentence, then test the cheapest one.</span>
+  Not "try SSRF" — instead: "the server assumes this avatar URL it fetches is a public image; is it?"
+  One sentence, one experiment, proven out-of-band.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
+  <div class="card brk">
+    <p>On a program you're <strong>authorised</strong> on (a public bug-bounty scope, or your own
+    site): spend ten minutes doing nothing but <em>using</em> it with a proxy running, and write down
+    five assumptions the developers clearly made. Don't attack anything yet — just list the beliefs.
+    That list is where every real finding will come from. Reply with the <em>shape</em> of the best
+    one (no target names needed) and I'll feature the pattern.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
+    <p>Security in plain English, a beginner tip, and one thing to build or break — every other week. Free.</p>
+    <a class="cta" href="/#join">Get on the list ▚</a>
+    <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
+  </div>
+
+  <nav class="foot-nav"><a href="01.html">← #01 Fold the light</a><a href="/issues/">all issues</a></nav>
+</div></article>
+</body>
+</html>
