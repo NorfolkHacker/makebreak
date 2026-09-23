@@ -41,6 +41,12 @@
   pre{background:#05070a;border:1px solid var(--line-strong);border-left:3px solid var(--break);border-radius:4px;padding:18px;overflow-x:auto;font-size:13.5px;line-height:1.6;margin:0 0 8px}
   pre code{background:none;border:0;padding:0;color:#cfe8d6}
   .cap{color:var(--muted);font-size:12.5px;margin:0 0 26px}
+  .toc{color:var(--muted);font-size:13px;margin-top:14px;letter-spacing:.02em}
+  .toc .sep{color:var(--faint);margin:0 8px}
+  .seg{font-family:var(--mono);text-transform:none;font-size:19px;font-weight:700;letter-spacing:0;margin:44px 0 12px}
+  .seg .ph{color:var(--make)}
+  .card{border:1px solid var(--line);border-left:3px solid var(--make);background:var(--surface);border-radius:4px;padding:16px 18px;margin:0 0 14px}
+  .card.brk{border-left-color:var(--break)}
   .strike{color:var(--muted)}.hl-make{color:var(--make);font-weight:700}.hl-break{color:var(--break);font-weight:700}
   /* live demo */
   .demo{border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--ground);margin:8px 0 10px;box-shadow:0 30px 80px -50px rgba(0,0,0,.9)}
@@ -74,6 +80,7 @@
   <div class="kicker"><span class="badge">MAKE</span><span>issue #00</span></div>
   <h1>A screen that <span class="em">breathes</span></h1>
   <p class="dek">Build a colour-cycling plasma in ~30 lines — then drag it around and break it, right here on the page.</p>
+  <p class="toc">in this issue<span class="sep">→</span>the build<span class="sep">·</span>steal this<span class="sep">·</span>in the wild<span class="sep">·</span>your turn</p>
 </div></header>
 
 <article><div class="wrap">
@@ -138,6 +145,31 @@ frame();
   <pre><code>const fx = Math.abs(px - W/2), fy = Math.abs(y - H/2);
 // then use fx / fy in the waves instead of px / y</code></pre>
   <p>Instant symmetry. That's issue #01's whole world — you just previewed it.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> steal this</h2>
+  <div class="card">
+    <p style="margin:0"><strong>Hydra</strong> — live-coding visuals in your browser, nothing to
+    install. Open <a href="https://hydra.ojack.xyz" target="_blank" rel="noopener">hydra.ojack.xyz</a>,
+    type <code>osc(20,0.1,1).rotate(0.7).out()</code>, hit Ctrl+Enter, and the whole screen becomes
+    an instrument. Best way I know to steal ideas for your own plasma — change a number, see it move.</p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> in the wild</h2>
+  <div class="card brk">
+    <p style="margin:0"><strong>‘elevated’</strong> — a program that renders an entire snow-capped
+    mountain range, fog, and a camera flythrough… in <strong>4 kilobytes</strong>. Your last
+    screenshot is a thousand times bigger than that. It's what happens when someone treats a brutal
+    constraint as a playground. Search <em>“elevated 4k intro”</em> and watch it once — then think
+    about how much your apps weigh.</p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
+  <div class="card">
+    <p style="margin:0">Make the plasma follow your mouse — feed the pointer's position into the
+    ripple, or move the centre point to wherever the cursor is. Ten minutes, tops. Reply with a
+    ten-second screen-grab and the best one runs at the <strong>top of issue #01, with your name on
+    it</strong>. Go on.</p>
+  </div>
 
   <div class="sub">
     <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
