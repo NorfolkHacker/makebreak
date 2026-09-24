@@ -67,5 +67,7 @@ pre code{background:none;border:0;padding:0;color:#cfe8d6}
 .cta{display:inline-block;font-weight:700;text-decoration:none;background:var(--break);color:var(--ground);padding:13px 22px;border-radius:2px;border:1px solid var(--break)}
 .signoff{font-family:var(--display);letter-spacing:.04em;color:var(--ink);text-align:right;margin-top:30px}
 .signoff .b{color:var(--break)}.signoff .m{color:var(--make)}
+.tip{margin:26px 0 0;padding:14px 16px;border:1px dashed var(--line-strong);border-radius:2px;color:var(--muted);font-size:14px}
+.tip a{color:var(--amber);font-weight:700;text-decoration:none;white-space:nowrap}.tip a:hover{text-decoration:underline}
 .foot-nav{border-top:1px solid var(--line);padding:22px 0;display:flex;justify-content:space-between;gap:12px;font-size:13px}
 .foot-nav a{text-decoration:none}
