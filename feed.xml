@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>MAKE / BREAK</title>
+  <link>https://makebreak.co.uk/</link>
+  <atom:link href="https://makebreak.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Put the phone down. Go make the machine misbehave. A free zine every other week: security in plain English, a beginner's tip, and one thing to build or break. By the Norfolk Hacker.</description>
+  <language>en-gb</language>
+  <image><url>https://makebreak.co.uk/og.png</url><title>MAKE / BREAK</title><link>https://makebreak.co.uk/</link></image>
+  <item>
+    <title>Issue #03 — Make Pure Data scream</title>
+    <link>https://makebreak.co.uk/issues/03.html</link>
+    <guid isPermaLink="true">https://makebreak.co.uk/issues/03.html</guid>
+    <pubDate>Wed, 23 Sep 2026 18:30:00 +0000</pubDate>
+    <description>This week's security in plain English, a 30-second check to see if you've already been breached, and the project: a little machine that plays music and never repeats itself.</description>
+  </item>
+  <item>
+    <title>Issue #02 — Recon that isn't a checklist</title>
+    <link>https://makebreak.co.uk/issues/02.html</link>
+    <guid isPermaLink="true">https://makebreak.co.uk/issues/02.html</guid>
+    <pubDate>Wed, 23 Sep 2026 18:20:00 +0000</pubDate>
+    <description>This week's security in plain English, the account upgrade that kills most phishing dead, and the project: how real bug-hunting starts — by looking, not by running ten tools.</description>
+  </item>
+  <item>
+    <title>Issue #01 — Fold the light</title>
+    <link>https://makebreak.co.uk/issues/01.html</link>
+    <guid isPermaLink="true">https://makebreak.co.uk/issues/01.html</guid>
+    <pubDate>Wed, 23 Sep 2026 18:10:00 +0000</pubDate>
+    <description>This week's security in plain English, a two-minute fix that stops the most common way people get hacked, and a build: turn last issue's plasma into a living kaleidoscope.</description>
+  </item>
+  <item>
+    <title>Issue #00 — A screen that breathes</title>
+    <link>https://makebreak.co.uk/issues/00.html</link>
+    <guid isPermaLink="true">https://makebreak.co.uk/issues/00.html</guid>
+    <pubDate>Wed, 23 Sep 2026 18:00:00 +0000</pubDate>
+    <description>This week's security in plain English, a beginner's tip that beats any antivirus, and a build: a plasma you make and break live on the page.</description>
+  </item>
+</channel>
+</rss>

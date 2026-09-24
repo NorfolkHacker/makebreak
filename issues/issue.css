@@ -44,6 +44,7 @@ pre code{background:none;border:0;padding:0;color:#cfe8d6}
 .card .do{color:var(--break);font-weight:700}
 .card .src{color:var(--faint);font-size:12px}
 .card .src a{color:var(--muted)}
+.rss{margin-left:14px;color:var(--muted);font-size:14px}.rss:hover{color:var(--amber)}
 .tip{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--surface);border-radius:4px;padding:8px 18px;margin:0 0 12px}
 .tip b{color:var(--amber)}
 .demo{border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;background:var(--ground);margin:12px 0 10px;box-shadow:0 30px 80px -50px rgba(0,0,0,.9)}

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Issue #00 — A screen that breathes</title>
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MAKE / BREAK">
 <meta property="og:title" content="Issue #00 — A screen that breathes">
@@ -63,6 +64,9 @@
   .card .do{color:var(--break);font-weight:700}
   .card .src{color:var(--faint);font-size:12px}
   .card .src a{color:var(--muted)}
+  .rss{margin-left:14px;color:var(--muted);font-size:14px}.rss:hover{color:var(--amber)}
+  .foot-nav{border-top:1px solid var(--line);padding:22px 0;display:flex;justify-content:space-between;gap:12px;font-size:13px}
+  .foot-nav a{text-decoration:none}
   .tip{border:1px solid var(--line);border-left:3px solid var(--amber);background:var(--surface);border-radius:4px;padding:8px 18px;margin:0 0 12px}
   .tip b{color:var(--amber)}
   /* live demo */
@@ -233,11 +237,13 @@ frame();
 
   <div class="sub">
     <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
-    <p>Security in plain English, a beginner tip, and one thing to build or break — every other week. Free.</p>
-    <a class="cta" href="/#join">Get on the list ▚</a>
+    <p>A new one every other week — free, right here, no signup needed. Rather it came to you? Your call.</p>
+    <a class="cta" href="/#join">Get it by email ▚</a> <a class="rss" href="/feed.xml">or RSS</a>
     <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
     <p class="tip">No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid" target="_blank" rel="noopener">☕ buy me a coffee</a> — it keeps the soldering iron hot.</p>
   </div>
+
+  <nav class="foot-nav"><a href="/issues/">all issues</a><a href="01.html">#01 Fold the light →</a></nav>
 </div></article>
 
 <script>
