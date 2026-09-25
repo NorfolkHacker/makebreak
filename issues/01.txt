@@ -1,0 +1,139 @@
+========================================================================
+  MAKE / BREAK                                                 issue #01
+  FOLD THE LIGHT
+  MAKE - 23 Sep 2026 - by the Norfolk Hacker
+========================================================================
+
+  This week's security in plain English, a two-minute fix that stops the
+  most common way people get hacked, and a build: turn last issue's
+  plasma into a living kaleidoscope.
+
+  colour edition: https://makebreak.co.uk/issues/01.html
+
+Back again. Same deal every other week: what happened in security
+without the jargon, one thing to learn if you're new, and one thing to
+make or break. Today we bend last issue's plasma into a mandala -- but
+first, the news.
+
+------------------------------------------------------------------------
+[ 1. THIS WEEK IN SECURITY ]
+
+Three worth knowing. One of them is why the beginner's tip below
+matters.
+
+ * 153 million driving-licence scans turned up for sale. A firm that
+   handles ID verification (IDScan) had a breach, and a dark-web service
+   is now hawking scans of licences from across the US and Canada --
+   names, licence numbers, the lot. This is the raw material for
+   identity theft.
+
+   -> do this: if that could include you, freezing your credit with the
+   big bureaus is the single strongest move -- it's free and stops
+   crooks opening accounts in your name. And be extra suspicious of
+   "verify your identity" messages for a while. (source) [1]
+
+ * That "T-Mobile reward" text is a trap. A big phishing wave is using
+   fake reward points and "they expire today!" pressure to get people
+   tapping a dodgy link. Doesn't have to be T-Mobile -- the trick is the
+   same everywhere: a prize plus a deadline.
+
+   -> do this: never claim a reward from a link in a text. If you think
+   it might be real, open the company's actual app and check there.
+   (source) [2]
+
+ * The scams sound human now. AI is stripping the old giveaways out of
+   scam messages -- no more broken English or weird formatting -- and
+   even cloning voices from a few seconds of audio. "It sounded exactly
+   like my daughter" is now a sentence real people say.
+
+   -> do this: agree a family "safe word" for genuine emergencies, and
+   if a call asking for money or codes feels off, hang up and call the
+   person back on their known number. (source) [3]
+
+------------------------------------------------------------------------
+[ 2. BEGINNER'S CORNER ]
+
+Why do breaches like the one above hurt so much? Because most people
+reuse the same password everywhere -- so one leaked password unlocks a
+dozen accounts. The fix is one habit.
+
+ * Get a password manager. Bitwarden (free, open-source) or your phone's
+   built-in one. It invents a long random password for every site and
+   remembers them all, so you don't. You memorise one strong master
+   password and nothing else.
+
+ * Then turn on two-factor (2FA) for email and banking at least. Even if
+   a password leaks, the attacker still can't get in. Prefer an app or a
+   passkey over text-message codes.
+
+Do those two things this week and you've closed the door that most
+break-ins walk through. That's the whole tip.
+
+------------------------------------------------------------------------
+[ 3. THE PROJECT ]
+
+FOLD THE LIGHT
+
+Last issue you made a plasma. Today we fold it into a kaleidoscope --
+and the whole trick is one line. Drag the petals.
+
+    [ live demo: https://makebreak.co.uk/issues/01.html ]
+
+Same plasma as issue #00 -- just folded into wedges. Set petals to 3,
+then 12.
+
+>> 01. The one idea
+
+Take any messy pattern, fold it around the centre, and your eye reads
+order where there was none. That's a kaleidoscope. The fold is literally
+one line -- you convert each pixel to an angle and mirror it into N
+wedges:
+
+    const seg = (Math.PI*2) / PETALS;
+    let ang = Math.atan2(dy, dx);
+    ang = Math.abs(((ang % seg) + seg) % seg - seg/2);  // ← the whole trick
+
+Everything six wedges see is now the same folded angle, so the pattern
+reflects around the circle. Change PETALS and you change the flower.
+Everything else -- the plasma, the colours -- is just what you're
+folding.
+
+>> 02. Now break it
+
+Kill the spin for a still mandala. Warp the radius (Math.sqrt(rad)*0.3)
+and it feels like falling in. Then the real prize: drive the petals or
+the speed from your microphone's volume and it dances to music -- a
+Virtual Light Machine in embryo, which is exactly where Jeff Minter took
+this idea. That's your turn.
+
+------------------------------------------------------------------------
+[ 4. YOUR TURN ]
+
+ * Make it react to sound. Grab the mic with getUserMedia, read the
+   volume with an AnalyserNode, and feed the bass into petals or spin.
+   Point it at a track and film ten seconds -- best one leads issue #02,
+   with your name on it.
+
+------------------------------------------------------------------------
+
+A new one every other week -- free, no signup needed:
+  https://makebreak.co.uk/issues/
+
+No paywall, no ads, no sponsor telling me what to say. If an issue
+earned you a brew: https://buymeacoffee.com/androidacid
+
+  -- the Norfolk Hacker
+
+  prev: #00 A screen that breathes
+        https://makebreak.co.uk/issues/00.txt
+  next: #02 Recon that isn't a checklist
+        https://makebreak.co.uk/issues/02.txt
+
+------------------------------------------------------------------------
+LINKS
+
+[1] https://www.techrepublic.com/article/news-biggest-data-breaches-2026-ranked-impact/
+[2] https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13
+[3] https://www.mcafee.com/learn/protect-yourself-from-the-latest-online-scams/
+
+========================================================================

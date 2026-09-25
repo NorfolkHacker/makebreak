@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Issue #01 — Fold the light (text edition)</title>
+<meta name="description" content="Plain-text edition of MAKE / BREAK #01: no bright colours, no effects.">
+<link rel="canonical" href="https://makebreak.co.uk/issues/01.html">
+<link rel="alternate" type="text/plain" href="01.txt">
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
+<style>
+  :root{--bg:#fbfaf6;--ink:#1c1c1a;--muted:#4d4d48;--line:#d8d6cf;--code:#f0eee8;--link:#1d3f8f}
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#161616;--ink:#dcdcd6;--muted:#a9a9a2;--line:#353533;--code:#222221;--link:#9fbcf5}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 Georgia,"Iowan Old Style","Times New Roman",serif}
+  main,nav.top{max-width:68ch;margin:0 auto;padding:0 16px}
+  nav.top{padding-block:14px;border-bottom:1px solid var(--line);font:0.95rem/1.5 system-ui,sans-serif;color:var(--muted);max-width:none}
+  nav.top div{max-width:calc(68ch - 32px);margin:0 auto;display:flex;flex-wrap:wrap;gap:6px 18px}
+  a{color:var(--link);text-underline-offset:2px}
+  h1{font-size:2rem;line-height:1.2;margin:36px 0 6px}
+  .meta{color:var(--muted);font:0.95rem/1.5 system-ui,sans-serif;margin:0 0 18px}
+  h2{font-size:1.4rem;margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:1.15rem;margin:30px 0 8px}
+  .item{border-left:3px solid var(--line);padding-left:16px;margin:18px 0}
+  .item p:first-child{margin-top:0}
+  code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.92em}
+  code{background:var(--code);padding:1px 4px;border-radius:3px}
+  pre{background:var(--code);padding:14px 16px;overflow-x:auto;border-radius:4px;line-height:1.5}
+  pre code{background:none;padding:0}
+  .demo{color:var(--muted);font-style:italic}
+  footer{margin:48px 0;padding-top:18px;border-top:1px solid var(--line)}
+  footer nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-family:system-ui,sans-serif;font-size:0.95rem}
+</style>
+</head>
+<body>
+<nav class="top"><div><a href="/">MAKE / BREAK</a><a href="/issues/text.html">all text editions</a><a href="01.html">colour edition</a><a href="01.txt">raw .txt</a></div></nav>
+<main>
+<h1>#01 — Fold the light</h1>
+<p class="meta">MAKE · 23 Sep 2026 · by the Norfolk Hacker</p>
+<p><em>This week&#x27;s security in plain English, a two-minute fix that stops the most common way people get hacked, and a build: turn last issue&#x27;s plasma into a living kaleidoscope.</em></p>
+<p>Back again. Same deal every other week: what happened in security without the jargon, one thing to learn if you're new, and one thing to make or break. Today we bend last issue's plasma into a mandala — but first, the news.</p>
+<h2>This week in security</h2>
+<p>Three worth knowing. One of them is why the beginner's tip below matters.</p>
+<div class="item">
+<p><strong>153 million driving-licence scans turned up for sale.</strong> A firm that handles ID verification (IDScan) had a breach, and a dark-web service is now hawking scans of licences from across the US and Canada — names, licence numbers, the lot. This is the raw material for identity theft.</p>
+<p>→ do this: if that could include you, freezing your credit with the big bureaus is the single strongest move — it's free and stops crooks opening accounts in your name. And be extra suspicious of "verify your identity" messages for a while. <a href="https://www.techrepublic.com/article/news-biggest-data-breaches-2026-ranked-impact/">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>That "T-Mobile reward" text is a trap.</strong> A big phishing wave is using fake reward points and "they expire today!" pressure to get people tapping a dodgy link. Doesn't have to be T-Mobile — the trick is the same everywhere: a prize plus a deadline.</p>
+<p>→ do this: never claim a reward from a link in a text. If you think it might be real, open the company's actual app and check there. <a href="https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>The scams sound human now.</strong> AI is stripping the old giveaways out of scam messages — no more broken English or weird formatting — and even cloning voices from a few seconds of audio. "It sounded exactly like my daughter" is now a sentence real people say.</p>
+<p>→ do this: agree a family "safe word" for genuine emergencies, and if a call asking for money or codes feels off, hang up and call the person back on their known number. <a href="https://www.mcafee.com/learn/protect-yourself-from-the-latest-online-scams/">(source)</a></p>
+</div>
+<h2>Beginner&#x27;s corner</h2>
+<p>Why do breaches like the one above hurt so much? Because most people reuse the same password everywhere — so one leaked password unlocks a dozen accounts. The fix is one habit.</p>
+<div class="item">
+<p><strong>Get a password manager.</strong> Bitwarden (free, open-source) or your phone's built-in one. It invents a long random password for every site and remembers them all, so you don't. You memorise <em>one</em> strong master password and nothing else.</p>
+</div>
+<div class="item">
+<p><strong>Then turn on two-factor (2FA)</strong> for email and banking at least. Even if a password leaks, the attacker still can't get in. Prefer an app or a passkey over text-message codes.</p>
+</div>
+<p>Do those two things this week and you've closed the door that most break-ins walk through. That's the whole tip.</p>
+<h2>The project: fold the light</h2>
+<p>Last issue you made a plasma. Today we fold it into a kaleidoscope — and the whole trick is one line. Drag the petals.</p>
+<p class="demo">[Live demo: the <a href="01.html">colour edition</a> runs this in your browser. The full code is below.]</p>
+<p>Same plasma as issue #00 — just folded into wedges. Set petals to 3, then 12.</p>
+<h3>01. The one idea</h3>
+<p>Take any messy pattern, fold it around the centre, and your eye reads order where there was none. That's a kaleidoscope. The fold is literally one line — you convert each pixel to an angle and mirror it into <code>N</code> wedges:</p>
+<pre><code>const seg = (Math.PI*2) / PETALS;
+let ang = Math.atan2(dy, dx);
+ang = Math.abs(((ang % seg) + seg) % seg - seg/2);  // ← the whole trick</code></pre>
+<p>Everything six wedges see is now the <em>same</em> folded angle, so the pattern reflects around the circle. Change <code>PETALS</code> and you change the flower. Everything else — the plasma, the colours — is just <em>what</em> you're folding.</p>
+<h3>02. Now break it</h3>
+<p>Kill the spin for a still mandala. Warp the radius (<code>Math.sqrt(rad)*0.3</code>) and it feels like falling in. Then the real prize: drive the petals or the speed from your microphone's volume and it dances to music — a Virtual Light Machine in embryo, which is exactly where Jeff Minter took this idea. That's your turn.</p>
+<h2>Your turn</h2>
+<div class="item">
+<p>Make it react to sound. Grab the mic with <code>getUserMedia</code>, read the volume with an <code>AnalyserNode</code>, and feed the bass into <code>petals</code> or <code>spin</code>. Point it at a track and film ten seconds — best one leads issue #02, with your name on it.</p>
+</div>
+<footer>
+<p>A new one every other week — free, no signup needed. Rather it came to you? <a href="/#join">Email</a> or <a href="/feed.xml">RSS</a>.</p>
+<p>No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid">buy me a coffee</a>.</p>
+<p>— the Norfolk Hacker</p>
+<nav><a href="00-text.html">← #00 A screen that breathes</a><a href="/issues/text.html">all issues</a><a href="02-text.html">#02 Recon that isn&#x27;t a checklist →</a></nav>
+</footer>
+</main>
+</body>
+</html>

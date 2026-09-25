@@ -1,0 +1,148 @@
+========================================================================
+  MAKE / BREAK                                                 issue #03
+  MAKE PURE DATA SCREAM
+  MAKE - 23 Sep 2026 - by the Norfolk Hacker
+========================================================================
+
+  This week's security in plain English, a 30-second check to see if
+  you've already been breached, and the project: a little machine that
+  plays music and never repeats itself.
+
+  colour edition: https://makebreak.co.uk/issues/03.html
+
+Back to making. The news, a tip, then we build an instrument that plays
+itself -- and you can hear it right here before you build a thing.
+
+------------------------------------------------------------------------
+[ 1. THIS WEEK IN SECURITY ]
+
+Three quick ones -- the theme is "things that look legit but aren't."
+
+ * Fake online shops, by the hundred thousand. Researchers counted well
+   over 100,000 scam storefronts -- polished, convincing, and built to
+   take your card details and ship you nothing. They rank in search and
+   run real-looking ads.
+
+   -> do this: before buying from a shop you don't know, search "[shop
+   name] scam", check the domain age, and pay with a method that fights
+   back (credit card or PayPal), never a bank transfer. (source) [1]
+
+ * Phishing pages are now built with legit browser tools. Attackers are
+   using ordinary web-dev tricks to spin up convincing fake logins fast.
+   Translation: "it looks professional" is worth nothing as a safety
+   signal.
+
+   -> do this: same golden rule as ever -- trust the address bar, not
+   the look. If the domain isn't exactly right, don't type your
+   password. (source) [1]
+
+ * Good news for once: passwordless is spreading. More big services now
+   let you sign in with a passkey -- no password to steal, no code to
+   phish. The tech that actually fixes this stuff is finally becoming
+   normal.
+
+   -> do this: next time a site offers "set up a passkey", say yes.
+   Future you will thank present you. (source) [2]
+
+------------------------------------------------------------------------
+[ 2. BEGINNER'S CORNER ]
+
+Want to know if any of these breaches already caught you? There's a
+free, trusted site for exactly that -- and it takes 30 seconds.
+
+ * Check haveibeenpwned.com. Type your email; it tells you which known
+   breaches it has turned up in. It's run by a respected security
+   researcher and doesn't store what you type. Not spooky magic -- just
+   a searchable index of public breach data.
+
+ * For every breach it lists, change that password (to a unique one from
+   your password manager) and turn on 2FA. Bonus: turn on its "notify
+   me" feature so you hear about future breaches early.
+
+Knowing beats guessing. Check it, fix what it flags, move on with your
+day.
+
+------------------------------------------------------------------------
+[ 3. THE PROJECT ]
+
+MAKE PURE DATA SCREAM
+
+A generative step sequencer: about a dozen boxes, and it improvises
+forever without repeating. Here's six seconds of it, rendered from the
+exact patch below:
+
+    [ listen: https://makebreak.co.uk/issues/seq.wav ]
+
+download the finished patch (.pd) [3]
+
+Grab Pure Data [4] (free), open the patch, tick Media -> DSP, click the
+toggle. Or build it yourself below -- you should.
+
+>> 01. The engine
+
+Three ideas do all the work: a clock, a coin-flip so it isn't a rigid
+loop, and a scale so every random note still sounds right.
+
+    [tgl] -> [metro 320]          a bang every 320ms (your tempo)
+    [metro 320] -> [random 100] -> [moses 22]   ~22% of steps stay silent
+    [moses 22] (right) -> [t b b]               fires right, then left
+
+moses 22 sends numbers under 22 out the left, 22-and-up out the right.
+We act only on the right -- so roughly a fifth of steps rest. That
+single coin-flip is what stops it sounding mechanical.
+
+>> 02. A note that's always in key
+
+    [t b b] (right) -> [random 5] -> [tabread mb_scale] -> [+ 50] -> [mtof] -> [osc~]
+
+mb_scale is a little array holding the minor pentatonic (0 3 5 7 10). A
+pentatonic has no wrong notes -- so however the randomness jumps, it
+always sounds musical. Constrain the randomness to a scale: that's the
+whole secret to "generative but not annoying".
+
+>> 03. The pluck, and staying out of the red
+
+    [t b b] (left) -> [0.8 5, 0 200 5(  -> [vline~]      a fast pluck envelope
+    [osc~] x [vline~] -> [*~] -> [*~ 0.35] -> [clip~ -0.95 0.95] -> [dac~]
+
+Multiply the tone by the envelope to get a plucked note; a gentle master
+gain and a clip~ safety net keep it from distorting. Tick DSP, click the
+toggle, and it starts improvising.
+
+>> 04. Now break it
+
+Smaller metro = faster. Bigger moses = sparser and more spacious. Swap
+the scale to harmonic minor (0 2 3 5 7 8 11, and bump random 5 to random
+7) for a whole new mood. Feeling brave? Pd seeds its randomness the same
+each launch, so the "song" repeats between sessions -- seed it from the
+clock and it never will.
+
+------------------------------------------------------------------------
+[ 4. YOUR TURN ]
+
+ * Give it a second voice -- a low drone or a bass note on every fourth
+   step (hint: a second counter and select 0). Record ten seconds of
+   your version and reply; the best one opens issue #04.
+
+------------------------------------------------------------------------
+
+A new one every other week -- free, no signup needed:
+  https://makebreak.co.uk/issues/
+
+No paywall, no ads, no sponsor telling me what to say. If an issue
+earned you a brew: https://buymeacoffee.com/androidacid
+
+  -- the Norfolk Hacker
+
+  prev: #02 Recon that isn't a checklist
+        https://makebreak.co.uk/issues/02.txt
+
+------------------------------------------------------------------------
+LINKS
+
+[1] https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html
+[2] https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13
+[3] https://makebreak.co.uk/patches/makebreak-seq.pd
+[4] https://puredata.info
+
+========================================================================

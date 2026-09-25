@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Issue #03 — Make Pure Data scream (text edition)</title>
+<meta name="description" content="Plain-text edition of MAKE / BREAK #03: no bright colours, no effects.">
+<link rel="canonical" href="https://makebreak.co.uk/issues/03.html">
+<link rel="alternate" type="text/plain" href="03.txt">
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
+<style>
+  :root{--bg:#fbfaf6;--ink:#1c1c1a;--muted:#4d4d48;--line:#d8d6cf;--code:#f0eee8;--link:#1d3f8f}
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#161616;--ink:#dcdcd6;--muted:#a9a9a2;--line:#353533;--code:#222221;--link:#9fbcf5}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 Georgia,"Iowan Old Style","Times New Roman",serif}
+  main,nav.top{max-width:68ch;margin:0 auto;padding:0 16px}
+  nav.top{padding-block:14px;border-bottom:1px solid var(--line);font:0.95rem/1.5 system-ui,sans-serif;color:var(--muted);max-width:none}
+  nav.top div{max-width:calc(68ch - 32px);margin:0 auto;display:flex;flex-wrap:wrap;gap:6px 18px}
+  a{color:var(--link);text-underline-offset:2px}
+  h1{font-size:2rem;line-height:1.2;margin:36px 0 6px}
+  .meta{color:var(--muted);font:0.95rem/1.5 system-ui,sans-serif;margin:0 0 18px}
+  h2{font-size:1.4rem;margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:1.15rem;margin:30px 0 8px}
+  .item{border-left:3px solid var(--line);padding-left:16px;margin:18px 0}
+  .item p:first-child{margin-top:0}
+  code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.92em}
+  code{background:var(--code);padding:1px 4px;border-radius:3px}
+  pre{background:var(--code);padding:14px 16px;overflow-x:auto;border-radius:4px;line-height:1.5}
+  pre code{background:none;padding:0}
+  .demo{color:var(--muted);font-style:italic}
+  footer{margin:48px 0;padding-top:18px;border-top:1px solid var(--line)}
+  footer nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-family:system-ui,sans-serif;font-size:0.95rem}
+</style>
+</head>
+<body>
+<nav class="top"><div><a href="/">MAKE / BREAK</a><a href="/issues/text.html">all text editions</a><a href="03.html">colour edition</a><a href="03.txt">raw .txt</a></div></nav>
+<main>
+<h1>#03 — Make Pure Data scream</h1>
+<p class="meta">MAKE · 23 Sep 2026 · by the Norfolk Hacker</p>
+<p><em>This week&#x27;s security in plain English, a 30-second check to see if you&#x27;ve already been breached, and the project: a little machine that plays music and never repeats itself.</em></p>
+<p>Back to making. The news, a tip, then we build an instrument that plays itself — and you can hear it right here before you build a thing.</p>
+<h2>This week in security</h2>
+<p>Three quick ones — the theme is "things that look legit but aren't."</p>
+<div class="item">
+<p><strong>Fake online shops, by the hundred thousand.</strong> Researchers counted well over 100,000 scam storefronts — polished, convincing, and built to take your card details and ship you nothing. They rank in search and run real-looking ads.</p>
+<p>→ do this: before buying from a shop you don't know, search "<em>[shop name] scam</em>", check the domain age, and pay with a method that fights back (credit card or PayPal), never a bank transfer. <a href="https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>Phishing pages are now built with legit browser tools.</strong> Attackers are using ordinary web-dev tricks to spin up convincing fake logins fast. Translation: "it looks professional" is worth nothing as a safety signal.</p>
+<p>→ do this: same golden rule as ever — trust the address bar, not the look. If the domain isn't exactly right, don't type your password. <a href="https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>Good news for once: passwordless is spreading.</strong> More big services now let you sign in with a passkey — no password to steal, no code to phish. The tech that actually fixes this stuff is finally becoming normal.</p>
+<p>→ do this: next time a site offers "set up a passkey", say yes. Future you will thank present you. <a href="https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13">(source)</a></p>
+</div>
+<h2>Beginner&#x27;s corner</h2>
+<p>Want to know if any of these breaches already caught you? There's a free, trusted site for exactly that — and it takes 30 seconds.</p>
+<div class="item">
+<p><strong>Check haveibeenpwned.com.</strong> Type your email; it tells you which known breaches it has turned up in. It's run by a respected security researcher and doesn't store what you type. Not spooky magic — just a searchable index of public breach data.</p>
+</div>
+<div class="item">
+<p><strong>For every breach it lists, change that password</strong> (to a unique one from your password manager) and turn on 2FA. Bonus: turn on its "notify me" feature so you hear about future breaches early.</p>
+</div>
+<p>Knowing beats guessing. Check it, fix what it flags, move on with your day.</p>
+<h2>The project: make Pure Data scream</h2>
+<p>A generative step sequencer: about a dozen boxes, and it improvises forever without repeating. Here's six seconds of it, rendered from the exact patch below:</p>
+<p class="demo">[Audio: <a href="seq.wav">listen to the sequencer</a>.]</p>
+<p><a href="/patches/makebreak-seq.pd">↓ download the finished patch (.pd)</a></p>
+<p>Grab <a href="https://puredata.info">Pure Data</a> (free), open the patch, tick Media → DSP, click the toggle. Or build it yourself below — you should.</p>
+<h3>01. The engine</h3>
+<p>Three ideas do all the work: a <strong>clock</strong>, a <strong>coin-flip</strong> so it isn't a rigid loop, and a <strong>scale</strong> so every random note still sounds right.</p>
+<pre><code>[tgl] -&gt; [metro 320]          a bang every 320ms (your tempo)
+[metro 320] -&gt; [random 100] -&gt; [moses 22]   ~22% of steps stay silent
+[moses 22] (right) -&gt; [t b b]               fires right, then left</code></pre>
+<p><code>moses 22</code> sends numbers under 22 out the left, 22-and-up out the right. We act only on the right — so roughly a fifth of steps rest. That single coin-flip is what stops it sounding mechanical.</p>
+<h3>02. A note that&#x27;s always in key</h3>
+<pre><code>[t b b] (right) -&gt; [random 5] -&gt; [tabread mb_scale] -&gt; [+ 50] -&gt; [mtof] -&gt; [osc~]</code></pre>
+<p><code>mb_scale</code> is a little array holding the <strong>minor pentatonic</strong> (<code>0 3 5 7 10</code>). A pentatonic has no wrong notes — so however the randomness jumps, it always sounds musical. Constrain the randomness to a scale: that's the whole secret to "generative but not annoying".</p>
+<h3>03. The pluck, and staying out of the red</h3>
+<pre><code>[t b b] (left) -&gt; [0.8 5, 0 200 5(  -&gt; [vline~]      a fast pluck envelope
+[osc~] x [vline~] -&gt; [*~] -&gt; [*~ 0.35] -&gt; [clip~ -0.95 0.95] -&gt; [dac~]</code></pre>
+<p>Multiply the tone by the envelope to get a plucked note; a gentle master gain and a <code>clip~</code> safety net keep it from distorting. Tick DSP, click the toggle, and it starts improvising.</p>
+<h3>04. Now break it</h3>
+<p>Smaller <code>metro</code> = faster. Bigger <code>moses</code> = sparser and more spacious. Swap the scale to harmonic minor (<code>0 2 3 5 7 8 11</code>, and bump <code>random 5</code> to <code>random 7</code>) for a whole new mood. Feeling brave? Pd seeds its randomness the same each launch, so the "song" repeats between sessions — seed it from the clock and it never will.</p>
+<h2>Your turn</h2>
+<div class="item">
+<p>Give it a second voice — a low drone or a bass note on every fourth step (hint: a second counter and <code>select 0</code>). Record ten seconds of your version and reply; the best one opens issue #04.</p>
+</div>
+<footer>
+<p>A new one every other week — free, no signup needed. Rather it came to you? <a href="/#join">Email</a> or <a href="/feed.xml">RSS</a>.</p>
+<p>No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid">buy me a coffee</a>.</p>
+<p>— the Norfolk Hacker</p>
+<nav><a href="02-text.html">← #02 Recon that isn&#x27;t a checklist</a><a href="/issues/text.html">all issues →</a></nav>
+</footer>
+</main>
+</body>
+</html>

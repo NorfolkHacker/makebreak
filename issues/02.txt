@@ -1,0 +1,154 @@
+========================================================================
+  MAKE / BREAK                                                 issue #02
+  RECON THAT ISN'T A CHECKLIST
+  BREAK - 23 Sep 2026 - by the Norfolk Hacker
+========================================================================
+
+  This week's security in plain English, the account upgrade that kills
+  most phishing dead, and the project: how real bug-hunting starts -- by
+  looking, not by running ten tools.
+
+  colour edition: https://makebreak.co.uk/issues/02.html
+
+We're switching hats this issue -- from making to breaking. Same rhythm:
+the news, a tip, then the main event. And a rule that never bends below:
+only ever test things you're allowed to test -- a bug-bounty target in
+scope, or your own kit. No permission, no poking.
+
+------------------------------------------------------------------------
+[ 1. THIS WEEK IN SECURITY ]
+
+Three that matter -- and the first is exactly why this week's tip is
+what it is.
+
+ * Attackers are tricking people into approving their login. There's
+   been a roughly 15x jump this year in "authorise this device" scams:
+   you get a real-looking sign-in prompt, tap approve to make it go
+   away, and you've just let a stranger into your account -- even with
+   2FA on.
+
+   -> do this: never approve a login prompt you didn't personally start.
+   If one appears out of nowhere, someone has your password -- go change
+   it. (source) [1]
+
+ * Phishing that hides behind Google. A slick campaign bounces victims
+   through six real Google services before dropping them on a fake login
+   -- so it sails past spam filters and the early links all look legit.
+   The lesson: a trustworthy-looking first hop means nothing.
+
+   -> do this: judge the page where you actually type your password, not
+   the link you clicked. Wrong domain in the address bar = leave.
+   (source) [2]
+
+ * Android's monthly patch is a big one. September's update fixes a pile
+   of flaws including some that let an attacker run code on your phone
+   remotely. Nothing for you to do but the usual -- but the usual really
+   matters here.
+
+   -> do this: Settings -> Security -> check for a security update. Aim
+   for patch level 2026-09-05 or later. (source) [3]
+
+------------------------------------------------------------------------
+[ 2. BEGINNER'S CORNER ]
+
+The device-approval scam above works because text-message and
+tap-to-approve 2FA can be socially engineered. There's a version that
+basically can't be: passkeys.
+
+ * Turn on passkeys where they're offered (Google, Apple, Microsoft,
+   PayPal, and more). A passkey lives on your phone or laptop and proves
+   it's really you with your fingerprint or face -- there's no code to
+   read out and nothing to phish. It literally won't work on a fake
+   site.
+
+ * Keep an authenticator app as backup (not SMS). Codes from an app beat
+   codes from a text, which can be intercepted or SIM-swapped.
+
+Passkey where you can, app-based codes where you can't, SMS only as a
+last resort. That ordering is the whole lesson.
+
+------------------------------------------------------------------------
+[ 3. THE PROJECT ]
+
+RECON THAT ISN'T A CHECKLIST
+
+Everyone runs the same ten tools. Almost nobody looks. This is about
+looking -- on a target you're authorised to test.
+
+The myth of recon is that it's a tool pipeline: fire the scanners, read
+the output, profit. That's not recon, it's a smoke alarm -- it tells you
+what a thousand other people's alarms already told them. The bugs that
+pay live in the 10% a scanner can't see, because they're not a
+signature. They're a contradiction you notice by paying attention.
+
+>> 01. The model
+
+Every app is a frozen snapshot of a team's assumptions. A bug is almost
+always where two of those assumptions disagree. So your whole job in
+recon is to reconstruct what the developers believed, so you can find
+where those beliefs collide:
+
+ * "Nobody will change this hidden field." - "This endpoint is only ever
+   called by our own app." - "That old subdomain is switched off." -
+   "This ID is random enough that you can't guess someone else's."
+
+Recon that finds bugs isn't "more hosts." It's more of the team's
+assumptions, written down.
+
+>> 02. The loop
+
+Enumerate, then read it like a story. Run your subdomain tools, sure --
+but don't grep for scanner hits, read the names. staging., dev.,
+legacy., api-v1., a dead brand. Each is an assumption ("this isn't
+public / isn't used / is forgotten"). The forgotten ones are where old
+auth and old code live.
+
+Watch the app use itself. Open the real product with your proxy on and
+just use it for ten minutes -- sign up, change a setting, invite a
+teammate. You're recording its vocabulary: the endpoints, the IDs, the
+shape of its objects. 80% of real findings start here, and no scanner
+does it.
+
+Diff the two pictures. Cross the map against the behaviour. The gold is
+in the mismatches: a client that sends role: "user" (what if you send
+"admin"?), a numeric ?id=8143 (is 8142 someone else's?), a staging box
+running the same API as prod but an older build.
+
+Write each assumption as a testable sentence, then test the cheapest
+one. Not "try SSRF" -- instead: "the server assumes this avatar URL it
+fetches is a public image; is it?" One sentence, one experiment, proven
+out-of-band.
+
+------------------------------------------------------------------------
+[ 4. YOUR TURN ]
+
+ * On a program you're authorised on (a public bug-bounty scope, or your
+   own site): spend ten minutes doing nothing but using it with a proxy
+   running, and write down five assumptions the developers clearly made.
+   Don't attack anything yet -- just list the beliefs. That list is
+   where every real finding will come from. Reply with the shape of the
+   best one (no target names needed) and I'll feature the pattern.
+
+------------------------------------------------------------------------
+
+A new one every other week -- free, no signup needed:
+  https://makebreak.co.uk/issues/
+
+No paywall, no ads, no sponsor telling me what to say. If an issue
+earned you a brew: https://buymeacoffee.com/androidacid
+
+  -- the Norfolk Hacker
+
+  prev: #01 Fold the light
+        https://makebreak.co.uk/issues/01.txt
+  next: #03 Make Pure Data scream
+        https://makebreak.co.uk/issues/03.txt
+
+------------------------------------------------------------------------
+LINKS
+
+[1] https://www.blackarrowcyber.com/blog/threat-briefing-11-september-2026
+[2] https://thehackernews.com/2026/09/threatsday-200-android-flaws-browser.html
+[3] https://securityonline.info/android-security-vulnerabilities-patch/
+
+========================================================================
