@@ -17,46 +17,55 @@ go.
 ------------------------------------------------------------------------
 [ 1. THIS WEEK IN SECURITY ]
 
-Four things worth 60 seconds of your attention. Two of them you can act
-on right now.
+Four things worth 60 seconds of your attention. Two are updates you can
+do before the kettle boils; the other two are phishing, which is why the
+beginner's tip below exists.
 
- * Update your browser today -- this one's being used right now. Google
-   shipped an emergency Chrome fix for a hole attackers are already
-   exploiting (CVE-2026-85046). The US cyber agency gave federal staff
-   two weeks to patch it, which is government-speak for "drop
-   everything." Takes 20 seconds.
+ * Two Chrome holes in a week, both already being used. Google patched
+   one actively exploited bug on 2 September (CVE-2026-85046), then had
+   to do it again a week later for another (CVE-2026-87491) -- the
+   seventh Chrome zero-day this year. A dodgy web page is all it takes.
+   You've probably got the fix downloaded and sitting there, waiting for
+   a restart you keep putting off.
 
-   -> do this: Chrome menu -> Help -> About Google Chrome -> let it
-   update -> Relaunch. Same for Edge, Brave, Opera, Vivaldi. (source)
-   [1]
+   -> do this: Chrome menu -> Help -> About Google Chrome -> Relaunch.
+   You want version 153 or later. Edge, Brave, Opera and Vivaldi share
+   the same engine, so update those too. (source) [1]
 
- * Your phone got a big patch too. Apple just pushed its largest-ever
-   security update (260+ fixes, iOS 27) and Android's September update
-   kills several remote-takeover bugs. Boring, unglamorous, and the
-   single highest-value thing you'll do all week.
+ * Got a Pixel? Someone's already been using this one. Google fixed a
+   flaw in the Pixel's modem -- the chip that handles calls and mobile
+   data -- that was being used in "limited, targeted" attacks, which
+   usually means spyware aimed at particular people. Other Android
+   phones aren't affected by that bug, and iPhones had their own
+   record-sized batch of fixes in iOS 27 on 14 September.
 
-   -> do this: iPhone: Settings -> General -> Software Update. Android:
-   Settings -> Security -> Security update. Turn on automatic updates
-   while you're there. (source) [2]
+   -> do this: Pixel: Settings -> Security & privacy -> System & updates
+   -> Security update, and check it says 5 September 2026 or later.
+   iPhone: Settings -> General -> Software Update. Turn on automatic
+   updates while you're in there. (source) [2]
 
- * Careful with QR codes in the wild. Scammers are sticking fake QR
-   codes over real ones -- on parking meters, restaurant tables, posters
-   -- so a scan sends you to a lookalike site that grabs your card
-   details or logins. It's phishing with a sticker.
+ * Revolut handed customer IDs to a fake government. Someone sent
+   Revolut an official-looking data request from a real government email
+   domain, and Revolut obliged: passports, licences, verification
+   selfies, addresses, transaction histories. Two days after it owned
+   up, customers started getting texts (nobody's proven they're
+   connected, but I wouldn't bet against it) that slot into their real
+   Revolut message thread and lead to a fake "turn your head" selfie
+   check, then a password box.
 
-   -> do this: if the QR is clearly a sticker slapped on top, or the
-   page it opens asks you to log in or pay, back out and type the real
-   address yourself. (source) [3]
+   -> do this: if you bank with Revolut (or anyone), never do an ID
+   check or log in from a link in a text. Open the app yourself. If it
+   doesn't ask you there, nobody's asking. (source) [3]
 
- * Tell your parents about this one. A nasty scam doing the rounds
-   starts with a pop-up screaming that your bank account or computer has
-   been "compromised", then a friendly "official" talks the victim into
-   moving their savings somewhere "safe" -- sometimes literally handing
-   over cash or gold bars.
+ * "Your parcel couldn't be delivered." No, it could. Fake courier texts
+   are doing the rounds again: a tiny fee, a couple of quid, to "rebook
+   delivery". The fee is bait. The fake site then wants your full card
+   details and your bank account number, which no redelivery has ever
+   needed.
 
-   -> do this: no real bank or police force ever phones to move your
-   money to safety. Hang up. Ring the number on the back of your card.
-   Forward this to someone who needs it. (source) [4]
+   -> do this: if you're actually expecting something, check the
+   tracking in the courier's own app or website. A small fee plus a
+   request for bank details is a scam every single time. (source) [4]
 
 ------------------------------------------------------------------------
 [ 2. BEGINNER'S CORNER ]
@@ -173,9 +182,9 @@ earned you a brew: https://buymeacoffee.com/androidacid
 ------------------------------------------------------------------------
 LINKS
 
-[1] https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html
-[2] https://www.theregister.com/security/2026/09/15/the-vulnpocalypse-rains-ibugs-down-on-apple-with-record-setting-number-of-patches/
-[3] https://www.mcafee.com/learn/protect-yourself-from-the-latest-online-scams/
-[4] https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13
+[1] https://thehackernews.com/2026/09/chrome-v8-zero-day-exploited-in-wild.html
+[2] https://www.malwarebytes.com/blog/mobile/2026/09/google-pixel-owners-urged-to-patch-actively-exploited-modem-flaw
+[3] https://www.malwarebytes.com/blog/threat-intel/2026/09/revolut-phishing-texts-appear-days-after-data-breach
+[4] https://www.malwarebytes.com/blog/scams/2026/09/fake-parcel-delivery-messages-steal-your-card-and-bank-details
 
 ========================================================================
