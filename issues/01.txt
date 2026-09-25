@@ -134,6 +134,6 @@ LINKS
 
 [1] https://www.techrepublic.com/article/news-biggest-data-breaches-2026-ranked-impact/
 [2] https://www.malwarebytes.com/blog/news/2026/09/a-week-in-security-september-7-september-13
-[3] https://www.mcafee.com/learn/protect-yourself-from-the-latest-online-scams/
+[3] https://consumer.ftc.gov/consumer-alerts/2023/03/scammers-use-ai-enhance-their-family-emergency-schemes
 
 ========================================================================
