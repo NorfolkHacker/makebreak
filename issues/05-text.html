@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Issue #05 — Sniff the air (text edition)</title>
+<meta name="description" content="Plain-text edition of MAKE / BREAK #05: no bright colours, no effects.">
+<link rel="canonical" href="https://makebreak.co.uk/issues/05.html">
+<link rel="alternate" type="text/plain" href="05.txt">
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
+<style>
+  :root{--bg:#fbfaf6;--ink:#1c1c1a;--muted:#4d4d48;--line:#d8d6cf;--code:#f0eee8;--link:#1d3f8f}
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#161616;--ink:#dcdcd6;--muted:#a9a9a2;--line:#353533;--code:#222221;--link:#9fbcf5}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 Georgia,"Iowan Old Style","Times New Roman",serif}
+  main,nav.top{max-width:68ch;margin:0 auto;padding:0 16px}
+  nav.top{padding-block:14px;border-bottom:1px solid var(--line);font:0.95rem/1.5 system-ui,sans-serif;color:var(--muted);max-width:none}
+  nav.top div{max-width:calc(68ch - 32px);margin:0 auto;display:flex;flex-wrap:wrap;gap:6px 18px}
+  a{color:var(--link);text-underline-offset:2px}
+  h1{font-size:2rem;line-height:1.2;margin:36px 0 6px}
+  .meta{color:var(--muted);font:0.95rem/1.5 system-ui,sans-serif;margin:0 0 18px}
+  h2{font-size:1.4rem;margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:1.15rem;margin:30px 0 8px}
+  .item{border-left:3px solid var(--line);padding-left:16px;margin:18px 0}
+  .item p:first-child{margin-top:0}
+  code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.92em}
+  code{background:var(--code);padding:1px 4px;border-radius:3px}
+  pre{background:var(--code);padding:14px 16px;overflow-x:auto;border-radius:4px;line-height:1.5}
+  pre code{background:none;padding:0}
+  .demo{color:var(--muted);font-style:italic}
+  footer{margin:48px 0;padding-top:18px;border-top:1px solid var(--line)}
+  footer nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-family:system-ui,sans-serif;font-size:0.95rem}
+</style>
+</head>
+<body>
+<nav class="top"><div><a href="/">MAKE / BREAK</a><a href="/issues/text.html">all text editions</a><a href="05.html">colour edition</a><a href="05.txt">raw .txt</a></div></nav>
+<main>
+<h1>#05 — Sniff the air</h1>
+<p class="meta">BREAK · 13 Oct 2026 · by the Norfolk Hacker</p>
+<p><em>This week&#x27;s security in plain English, a beginner&#x27;s fix for the trail your phone leaves behind, and the project: turn a £4 chip into a Wi-Fi sniffer — and hear what your own devices are shouting into the room.</em></p>
+<p>Today we make a tiny chip listen to the air, and it's going to be a bit unsettling — in the good, educational way. One rule that never bends: <strong>listen on your own kit and your own space, and don't collect, keep, or act on anyone else's data.</strong> Watching the radio around you is one thing; interfering with it, or hoovering up strangers' details, is another entirely. We build to understand and to defend — never to be a nuisance.</p>
+<h2>This week in security</h2>
+<p>Three quick ones — and this fortnight they all live on the little box in your hallway that you never think about.</p>
+<div class="item">
+<p><strong>Your router is officially the riskiest thing on your network.</strong> Forescout's 2026 report put routers at the <em>top</em> of the danger list — an average of 32 known vulnerabilities each — and botnets are cashing in, herding hijacked home routers and cameras into attacks big enough to knock major services offline.</p>
+<p>→ do this: give it two minutes. Reboot the router, check for a firmware update (turn on auto-update if it's there), and switch off "remote management" and UPnP unless you truly need them. <a href="https://www.forescout.com/blog/ot-network-security-threats-industrial-routers-under-attack/">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>The gadgets still ship with "admin / admin", and the botnets know it.</strong> This year's big IoT botnets spread mostly by trying default logins over the internet; authorities took down networks spanning three million-plus compromised routers, cameras and DVRs. Not clever zero-days — just doors nobody locked.</p>
+<p>→ do this: change the default password on <em>everything</em> that joins your Wi-Fi — camera, printer, doorbell, plug, telly. If it still says "admin", it's a welcome mat. <a href="https://www.cybersecuritydive.com/news/-botnet-exploits-tp-link-router/742319/">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>WPA3 is the free upgrade you probably haven't switched on.</strong> Old WPA2 leaves the little "management" messages that keep you connected completely unsigned — which is exactly the weakness today's project lets you see with your own eyes. WPA3 closes it.</p>
+<p>→ do this: in your router's Wi-Fi settings, set encryption to <strong>WPA3</strong> (or "WPA2/WPA3" if you've older gear). Two taps, genuinely better security. <a href="https://thehackernews.com/search/label/wifi%20hacking">(source)</a></p>
+</div>
+<h2>Beginner&#x27;s corner</h2>
+<p>In a minute you'll watch phones broadcast the names of networks they've joined before. Here's how to make <em>yours</em> shut up.</p>
+<div class="item">
+<p><strong>Forget the networks you don't need.</strong> Your phone keeps a list of every Wi-Fi it's ever joined and, on older devices, quietly shouts those names to see if any are nearby — a little trail of every café, hotel and airport you've visited. On your phone: <strong>Settings → Wi-Fi</strong>, tap a network you won't use again, and hit <strong>Forget</strong>. Fewer names shouted, smaller trail.</p>
+</div>
+<div class="item">
+<p><strong>And leave "private/random MAC address" switched on.</strong> Modern phones now use a different, made-up hardware address for each network so you can't be followed shop to shop. It's on by default on recent iPhones and Androids — just don't turn it off when a captive portal nags you to.</p>
+</div>
+<p>Right. Now let's go and actually see it happening.</p>
+<h2>The project: sniff the air</h2>
+<p>We turn a cheap microcontroller into a passive Wi-Fi listener: first it maps the networks around you, then it catches the little "is anyone I know here?" calls your gadgets shout out — the same trick real attackers use to profile a room. Everything here is <em>receive-only</em>. We listen; we don't transmit.</p>
+<p><strong>What you'll need:</strong> any <strong>ESP32</strong> dev board (about £4–6 — an "ESP32-WROOM DevKit" is the common one), a USB cable, and the free <strong>Arduino IDE</strong> with the "esp32 by Espressif" boards package installed. Set <strong>Tools → Board → "ESP32 Dev Module"</strong>, pick the port, and open the <strong>Serial Monitor at 115200 baud</strong> after each upload.</p>
+<p><a href="/patches/esp32-probe-sniffer.ino">↓ grab the sniffer sketch (.ino)</a></p>
+<p>Or type them out below — both sketches are short on purpose.</p>
+<h3>01. See the airwaves</h3>
+<p>Start gentle. This just asks the chip "what networks can you hear?" and prints them — signal strength, channel, and whether they're wide open. Flash it and open the Serial Monitor:</p>
+<pre><code>#include &lt;WiFi.h&gt;
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);          // station mode, but don't connect to anything
+  WiFi.disconnect();
+  delay(100);
+}
+
+void loop() {
+  int n = WiFi.scanNetworks();
+  Serial.printf("\n-- %d networks in earshot --\n", n);
+  for (int i = 0; i &lt; n; i++) {
+    bool open = WiFi.encryptionType(i) == WIFI_AUTH_OPEN;
+    Serial.printf("  %4d dBm  ch%-2d  %-6s  %s\n",
+      WiFi.RSSI(i), WiFi.channel(i),
+      open ? "OPEN!" : "locked", WiFi.SSID(i).c_str());
+  }
+  delay(5000);
+}</code></pre>
+<p>You've just built a radio-scanner that fits on a keyring. Every "OPEN!" is a network with no encryption at all — fine for a menu QR code, a terrible place to check your bank.</p>
+<h3>02. Now listen closer</h3>
+<p>Scanning is polite — you're reading the shop signs. The next one is the eye-opener. We put the chip into <strong>promiscuous mode</strong>, where it hands us every raw frame in the air, and we pick out one kind: the <strong>probe request</strong> — a device calling out "<em>NETNAME, are you here?</em>" to a network it remembers.</p>
+<pre><code>#include &lt;WiFi.h&gt;
+#include "esp_wifi.h"
+
+void onPacket(void *buf, wifi_promiscuous_pkt_type_t type) {
+  auto *pkt = (wifi_promiscuous_pkt_t *)buf;
+  const uint8_t *f = pkt-&gt;payload;
+
+  if (f[0] != 0x40) return;            // 0x40 = a probe request, ignore the rest
+
+  const uint8_t *mac = f + 10;         // address 2 = who's asking
+  uint8_t len = f[25];                 // length of the network name they want
+  char ssid[33] = {0};
+  for (int i = 0; i &lt; len &amp;&amp; i &lt; 32; i++) ssid[i] = f[26 + i];
+
+  Serial.printf("%4d dBm  %02X:%02X:%02X:%02X:%02X:%02X  wants: \"%s\"\n",
+    pkt-&gt;rx_ctrl.rssi, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+    len ? ssid : "(anything out there?)");
+}
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  esp_wifi_set_promiscuous(true);
+  wifi_promiscuous_filter_t filter = { .filter_mask = WIFI_PROMIS_FILTER_MASK_MGMT };
+  esp_wifi_set_promiscuous_filter(&amp;filter);
+  esp_wifi_set_promiscuous_rx_cb(&amp;onPacket);
+}
+
+void loop() {                          // hop channels so we hear the whole room
+  for (uint8_t ch = 1; ch &lt;= 13; ch++) {
+    esp_wifi_set_channel(ch, WIFI_SECOND_CHAN_NONE);
+    delay(300);
+  }
+}</code></pre>
+<p>Leave it running for a minute in a busy-ish spot (your own home is plenty). The Serial Monitor fills with something like this:</p>
+<pre><code>  -78 dBm  A4:83:E7:1C:22:0B  wants: "The Bull B&amp;B"
+  -66 dBm  9C:B6:D0:44:19:7F  wants: "Premier Inn WiFi"
+  -66 dBm  9C:B6:D0:44:19:7F  wants: "CoffeeRepublic_Guest"
+  -66 dBm  9C:B6:D0:44:19:7F  wants: "BTHub6-K9QX"
+  -71 dBm  3E:A1:55:0C:88:12  wants: "(anything out there?)"</code></pre>
+<p>Read the middle one. A <em>single device</em> (same MAC) is calling out three different network names — a hotel, a coffee chain, a home hub. That's someone's phone reciting its recent history to the whole room, and it's how "creepy" location tracking in shops actually works: not magic, just listening. (You'll see fewer of these than you'd expect from newer phones — MAC randomisation and quieter probing, the very fixes from the corner above, are why.)</p>
+<h3>03. The bit they don&#x27;t advertise</h3>
+<p>Here's the uncomfortable part, and the reason WPA3 matters. To keep you connected, your device and router constantly swap tiny <strong>management frames</strong> — including one that means "you're disconnected now." Under WPA2, <em>nobody signs those</em>. So anyone nearby can forge a "disconnect" wearing your router's address and boot you off the network on demand. That's a <strong>deauth attack</strong>, and it's the engine inside most so-called "Wi-Fi jammers".</p>
+<p>The same little chip in your hand can send those frames. I'm deliberately <em>not</em> giving you that code — doing it to a network you don't own is illegal (it's plain denial-of-service) and, frankly, the behaviour of a wally. The point is to <em>understand</em> the hole so you can shut it: WPA3, and its <strong>Protected Management Frames</strong>, sign those messages, and the forgery simply bounces. The attack this chip could do stops working the moment you turn WPA3 on — which is why it's this week's news item. Seeing the weakness is the best possible argument for the fix.</p>
+<h2>Your turn</h2>
+<div class="item">
+<p>Turn the tool around and build a <strong>defender</strong>. Deauth frames are management type <code>0x0C</code>, so in the sniffer swap the test to <code>if (f[0] == 0xC0)</code>, count how many arrive in a few seconds, and blink the on-board LED (GPIO 2) if there's a sudden burst. You've just built an early-warning sensor for the attack — without ever launching it. Reply with your detector; the neatest one opens issue #06.</p>
+</div>
+<footer>
+<p>A new one every other week — free, no signup needed. Rather it came to you? <a href="/#join">Email</a> or <a href="/feed.xml">RSS</a>.</p>
+<p>No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid">buy me a coffee</a>.</p>
+<p>— the Norfolk Hacker</p>
+<nav><a href="04-text.html">← #04 Make it confess</a><a href="/issues/text.html">all issues →</a></nav>
+</footer>
+</main>
+</body>
+</html>

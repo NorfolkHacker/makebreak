@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue #05 — Sniff the air</title>
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAKE / BREAK">
+<meta property="og:title" content="Issue #05 — Sniff the air">
+<meta property="og:description" content="MAKE / BREAK #05: this week in security, a beginner's fix for the trail your phone leaves, and the project — turn a £4 ESP32 into a Wi-Fi sniffer and hear what your devices are shouting.">
+<meta property="og:url" content="https://makebreak.co.uk/issues/05.html">
+<meta property="og:image" content="https://makebreak.co.uk/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MAKE / BREAK — put the phone down, go make the machine misbehave">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="MAKE / BREAK #05: this week in security, a beginner's fix for the trail your phone leaves, and the project — turn a £4 ESP32 into a Wi-Fi sniffer and hear what your devices are shouting.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="issue.css">
+<style>
+  .term{background:#05070a;border:1px solid var(--line-strong);border-left:3px solid var(--break);border-radius:4px;margin:0 0 14px;overflow:hidden}
+  .term-head{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .term-title{color:var(--muted);font-size:12px;margin-left:6px}
+  .term pre{border:0;border-left:0;border-radius:0;margin:0;background:transparent}
+  .term .ok{color:var(--break);font-weight:700}
+  .term .no{color:var(--make)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><span class="b">MAKE</span> <span style="color:var(--faint)">/</span> <span class="s">BREAK</span></a>
+  <span class="barmeta">issue #05 · every other week<!--tx--> · <a href="05-text.html">text version</a><!--/tx--></span>
+</div></div>
+
+<header class="issue"><div class="wrap">
+  <div class="kicker"><span class="badge brk">BREAK</span><span>issue #05</span></div>
+  <h1>Sniff the <span class="em">air</span></h1>
+  <p class="dek">This week's security in plain English, a beginner's fix for the trail your phone leaves behind, and the project: turn a £4 chip into a Wi-Fi sniffer — and hear what your own devices are shouting into the room.</p>
+  <p class="toc">this week in security<span class="sep">·</span>beginner's corner<span class="sep">·</span>the project<span class="sep">·</span>your turn</p>
+</div></header>
+
+<article><div class="wrap">
+  <p>Today we make a tiny chip listen to the air, and it's going to be a bit unsettling — in the good,
+  educational way. One rule that never bends: <strong>listen on your own kit and your own space, and
+  don't collect, keep, or act on anyone else's data.</strong> Watching the radio around you is one
+  thing; interfering with it, or hoovering up strangers' details, is another entirely. We build to
+  understand and to defend — never to be a nuisance.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> this week in security</h2>
+  <p class="seg-note">Three quick ones — and this fortnight they all live on the little box in your
+  hallway that you never think about.</p>
+
+  <div class="card">
+    <p><strong>Your router is officially the riskiest thing on your network.</strong> Forescout's 2026
+    report put routers at the <em>top</em> of the danger list — an average of 32 known vulnerabilities
+    each — and botnets are cashing in, herding hijacked home routers and cameras into attacks big
+    enough to knock major services offline.</p>
+    <p><span class="do">→ do this:</span> give it two minutes. Reboot the router, check for a firmware
+    update (turn on auto-update if it's there), and switch off "remote management" and UPnP unless you
+    truly need them.
+    <span class="src"><a href="https://www.forescout.com/blog/ot-network-security-threats-industrial-routers-under-attack/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>The gadgets still ship with "admin / admin", and the botnets know it.</strong> This
+    year's big IoT botnets spread mostly by trying default logins over the internet; authorities took
+    down networks spanning three million-plus compromised routers, cameras and DVRs. Not clever
+    zero-days — just doors nobody locked.</p>
+    <p><span class="do">→ do this:</span> change the default password on <em>everything</em> that joins
+    your Wi-Fi — camera, printer, doorbell, plug, telly. If it still says "admin", it's a welcome mat.
+    <span class="src"><a href="https://www.cybersecuritydive.com/news/-botnet-exploits-tp-link-router/742319/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>WPA3 is the free upgrade you probably haven't switched on.</strong> Old WPA2 leaves the
+    little "management" messages that keep you connected completely unsigned — which is exactly the
+    weakness today's project lets you see with your own eyes. WPA3 closes it.</p>
+    <p><span class="do">→ do this:</span> in your router's Wi-Fi settings, set encryption to <strong>WPA3</strong>
+    (or "WPA2/WPA3" if you've older gear). Two taps, genuinely better security.
+    <span class="src"><a href="https://thehackernews.com/search/label/wifi%20hacking" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> beginner's corner</h2>
+  <p class="seg-note">In a minute you'll watch phones broadcast the names of networks they've joined
+  before. Here's how to make <em>yours</em> shut up.</p>
+  <div class="tip"><p><b>Forget the networks you don't need.</b> Your phone keeps a list of every Wi-Fi
+  it's ever joined and, on older devices, quietly shouts those names to see if any are nearby — a
+  little trail of every café, hotel and airport you've visited. On your phone: <b>Settings → Wi-Fi</b>,
+  tap a network you won't use again, and hit <b>Forget</b>. Fewer names shouted, smaller trail.</p></div>
+  <div class="tip"><p><b>And leave "private/random MAC address" switched on.</b> Modern phones now use a
+  different, made-up hardware address for each network so you can't be followed shop to shop. It's on by
+  default on recent iPhones and Androids — just don't turn it off when a captive portal nags you to.</p></div>
+  <p>Right. Now let's go and actually see it happening.</p>
+
+  <h2 class="proj">The project — sniff the air</h2>
+  <p class="seg-note">We turn a cheap microcontroller into a passive Wi-Fi listener: first it maps the
+  networks around you, then it catches the little "is anyone I know here?" calls your gadgets shout out
+  — the same trick real attackers use to profile a room. Everything here is <em>receive-only</em>. We
+  listen; we don't transmit.</p>
+
+  <p><b>What you'll need:</b> any <strong>ESP32</strong> dev board (about £4–6 — an "ESP32-WROOM
+  DevKit" is the common one), a USB cable, and the free <strong>Arduino IDE</strong> with the
+  "esp32 by Espressif" boards package installed. Set <b>Tools → Board → "ESP32 Dev Module"</b>, pick
+  the port, and open the <b>Serial Monitor at 115200 baud</b> after each upload.</p>
+
+  <a class="dl" href="/patches/esp32-probe-sniffer.ino" download>↓ grab the sniffer sketch (.ino)</a>
+  <p class="cap">Or type them out below — both sketches are short on purpose.</p>
+
+  <h3><span class="n">01</span>See the airwaves</h3>
+  <p>Start gentle. This just asks the chip "what networks can you hear?" and prints them — signal
+  strength, channel, and whether they're wide open. Flash it and open the Serial Monitor:</p>
+  <pre><code>#include &lt;WiFi.h&gt;
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);          // station mode, but don't connect to anything
+  WiFi.disconnect();
+  delay(100);
+}
+
+void loop() {
+  int n = WiFi.scanNetworks();
+  Serial.printf("\n-- %d networks in earshot --\n", n);
+  for (int i = 0; i &lt; n; i++) {
+    bool open = WiFi.encryptionType(i) == WIFI_AUTH_OPEN;
+    Serial.printf("  %4d dBm  ch%-2d  %-6s  %s\n",
+      WiFi.RSSI(i), WiFi.channel(i),
+      open ? "OPEN!" : "locked", WiFi.SSID(i).c_str());
+  }
+  delay(5000);
+}</code></pre>
+  <p>You've just built a radio-scanner that fits on a keyring. Every "OPEN!" is a network with no
+  encryption at all — fine for a menu QR code, a terrible place to check your bank.</p>
+
+  <h3><span class="n">02</span>Now listen closer</h3>
+  <p>Scanning is polite — you're reading the shop signs. The next one is the eye-opener. We put the
+  chip into <strong>promiscuous mode</strong>, where it hands us every raw frame in the air, and we pick
+  out one kind: the <strong>probe request</strong> — a device calling out "<em>NETNAME, are you
+  here?</em>" to a network it remembers.</p>
+  <pre><code>#include &lt;WiFi.h&gt;
+#include "esp_wifi.h"
+
+void onPacket(void *buf, wifi_promiscuous_pkt_type_t type) {
+  auto *pkt = (wifi_promiscuous_pkt_t *)buf;
+  const uint8_t *f = pkt-&gt;payload;
+
+  if (f[0] != 0x40) return;            // 0x40 = a probe request, ignore the rest
+
+  const uint8_t *mac = f + 10;         // address 2 = who's asking
+  uint8_t len = f[25];                 // length of the network name they want
+  char ssid[33] = {0};
+  for (int i = 0; i &lt; len &amp;&amp; i &lt; 32; i++) ssid[i] = f[26 + i];
+
+  Serial.printf("%4d dBm  %02X:%02X:%02X:%02X:%02X:%02X  wants: \"%s\"\n",
+    pkt-&gt;rx_ctrl.rssi, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+    len ? ssid : "(anything out there?)");
+}
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  esp_wifi_set_promiscuous(true);
+  wifi_promiscuous_filter_t filter = { .filter_mask = WIFI_PROMIS_FILTER_MASK_MGMT };
+  esp_wifi_set_promiscuous_filter(&amp;filter);
+  esp_wifi_set_promiscuous_rx_cb(&amp;onPacket);
+}
+
+void loop() {                          // hop channels so we hear the whole room
+  for (uint8_t ch = 1; ch &lt;= 13; ch++) {
+    esp_wifi_set_channel(ch, WIFI_SECOND_CHAN_NONE);
+    delay(300);
+  }
+}</code></pre>
+  <p>Leave it running for a minute in a busy-ish spot (your own home is plenty). The Serial Monitor
+  fills with something like this:</p>
+  <div class="term">
+    <div class="term-head"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span class="term-title">Serial Monitor — 115200 baud</span></div>
+    <pre><code>  -78 dBm  A4:83:E7:1C:22:0B  wants: "The Bull B&amp;B"
+  -66 dBm  9C:B6:D0:44:19:7F  wants: "Premier Inn WiFi"
+  -66 dBm  9C:B6:D0:44:19:7F  wants: "CoffeeRepublic_Guest"
+  -66 dBm  9C:B6:D0:44:19:7F  wants: "BTHub6-K9QX"
+  -71 dBm  3E:A1:55:0C:88:12  wants: <span class="no">"(anything out there?)"</span></code></pre>
+  </div>
+  <p>Read the middle one. A <em>single device</em> (same MAC) is calling out three different network
+  names — a hotel, a coffee chain, a home hub. That's someone's phone reciting its recent history to
+  the whole room, and it's how "creepy" location tracking in shops actually works: not magic, just
+  listening. (You'll see fewer of these than you'd expect from newer phones — MAC randomisation and
+  quieter probing, the very fixes from the corner above, are why.)</p>
+
+  <h3><span class="n">03</span>The bit they don't advertise</h3>
+  <p>Here's the uncomfortable part, and the reason WPA3 matters. To keep you connected, your device and
+  router constantly swap tiny <strong>management frames</strong> — including one that means "you're
+  disconnected now." Under WPA2, <em>nobody signs those</em>. So anyone nearby can forge a
+  "disconnect" wearing your router's address and boot you off the network on demand. That's a
+  <strong>deauth attack</strong>, and it's the engine inside most so-called "Wi-Fi jammers".</p>
+  <p>The same little chip in your hand can send those frames. I'm deliberately <em>not</em> giving you
+  that code — doing it to a network you don't own is illegal (it's plain denial-of-service) and, frankly,
+  the behaviour of a wally. The point is to <em>understand</em> the hole so you can shut it: WPA3, and
+  its <strong>Protected Management Frames</strong>, sign those messages, and the forgery simply bounces.
+  The attack this chip could do stops working the moment you turn WPA3 on — which is why it's this
+  week's news item. Seeing the weakness is the best possible argument for the fix.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
+  <div class="card">
+    <p>Turn the tool around and build a <strong>defender</strong>. Deauth frames are management type
+    <code>0x0C</code>, so in the sniffer swap the test to <code>if (f[0] == 0xC0)</code>, count how many
+    arrive in a few seconds, and blink the on-board LED (GPIO 2) if there's a sudden burst. You've just
+    built an early-warning sensor for the attack — without ever launching it. Reply with your detector;
+    the neatest one opens issue #06.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
+    <p>A new one every other week — free, right here, no signup needed. Rather it came to you? Your call.</p>
+    <a class="cta" href="/#join">Get it by email ▚</a> <a class="rss" href="/feed.xml">or RSS</a>
+    <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
+    <p class="tip">No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid" target="_blank" rel="noopener">☕ buy me a coffee</a> — it keeps the soldering iron hot.</p>
+  </div>
+
+  <nav class="foot-nav"><a href="04.html">← #04 Make it confess</a><a href="/issues/">all issues →</a></nav>
+</div></article>
+</body>
+</html>

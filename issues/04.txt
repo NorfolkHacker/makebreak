@@ -217,6 +217,8 @@ earned you a brew: https://buymeacoffee.com/androidacid
 
   prev: #03 Make Pure Data scream
         https://makebreak.co.uk/issues/03.txt
+  next: #05 Sniff the air
+        https://makebreak.co.uk/issues/05.txt
 
 ------------------------------------------------------------------------
 LINKS

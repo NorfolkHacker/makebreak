@@ -8,6 +8,13 @@
   <language>en-gb</language>
   <image><url>https://makebreak.co.uk/og.png</url><title>MAKE / BREAK</title><link>https://makebreak.co.uk/</link></image>
   <item>
+    <title>Issue #05 — Sniff the air</title>
+    <link>https://makebreak.co.uk/issues/05.html</link>
+    <guid isPermaLink="true">https://makebreak.co.uk/issues/05.html</guid>
+    <pubDate>Tue, 13 Oct 2026 09:00:00 +0000</pubDate>
+    <description>This week's security in plain English, a beginner's fix for the trail your phone leaves, and the project: turn a £4 ESP32 into a Wi-Fi sniffer and hear what your own devices are shouting into the room.</description>
+  </item>
+  <item>
     <title>Issue #04 — Make it confess</title>
     <link>https://makebreak.co.uk/issues/04.html</link>
     <guid isPermaLink="true">https://makebreak.co.uk/issues/04.html</guid>

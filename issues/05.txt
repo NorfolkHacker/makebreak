@@ -1,0 +1,240 @@
+========================================================================
+  MAKE / BREAK                                                 issue #05
+  SNIFF THE AIR
+  BREAK - 13 Oct 2026 - by the Norfolk Hacker
+========================================================================
+
+  This week's security in plain English, a beginner's fix for the trail
+  your phone leaves behind, and the project: turn a £4 chip into a Wi-Fi
+  sniffer -- and hear what your own devices are shouting into the room.
+
+  colour edition: https://makebreak.co.uk/issues/05.html
+
+Today we make a tiny chip listen to the air, and it's going to be a bit
+unsettling -- in the good, educational way. One rule that never bends:
+listen on your own kit and your own space, and don't collect, keep, or
+act on anyone else's data. Watching the radio around you is one thing;
+interfering with it, or hoovering up strangers' details, is another
+entirely. We build to understand and to defend -- never to be a
+nuisance.
+
+------------------------------------------------------------------------
+[ 1. THIS WEEK IN SECURITY ]
+
+Three quick ones -- and this fortnight they all live on the little box
+in your hallway that you never think about.
+
+ * Your router is officially the riskiest thing on your network.
+   Forescout's 2026 report put routers at the top of the danger list --
+   an average of 32 known vulnerabilities each -- and botnets are
+   cashing in, herding hijacked home routers and cameras into attacks
+   big enough to knock major services offline.
+
+   -> do this: give it two minutes. Reboot the router, check for a
+   firmware update (turn on auto-update if it's there), and switch off
+   "remote management" and UPnP unless you truly need them. (source) [1]
+
+ * The gadgets still ship with "admin / admin", and the botnets know it.
+   This year's big IoT botnets spread mostly by trying default logins
+   over the internet; authorities took down networks spanning three
+   million-plus compromised routers, cameras and DVRs. Not clever
+   zero-days -- just doors nobody locked.
+
+   -> do this: change the default password on everything that joins your
+   Wi-Fi -- camera, printer, doorbell, plug, telly. If it still says
+   "admin", it's a welcome mat. (source) [2]
+
+ * WPA3 is the free upgrade you probably haven't switched on. Old WPA2
+   leaves the little "management" messages that keep you connected
+   completely unsigned -- which is exactly the weakness today's project
+   lets you see with your own eyes. WPA3 closes it.
+
+   -> do this: in your router's Wi-Fi settings, set encryption to WPA3
+   (or "WPA2/WPA3" if you've older gear). Two taps, genuinely better
+   security. (source) [3]
+
+------------------------------------------------------------------------
+[ 2. BEGINNER'S CORNER ]
+
+In a minute you'll watch phones broadcast the names of networks they've
+joined before. Here's how to make yours shut up.
+
+ * Forget the networks you don't need. Your phone keeps a list of every
+   Wi-Fi it's ever joined and, on older devices, quietly shouts those
+   names to see if any are nearby -- a little trail of every café, hotel
+   and airport you've visited. On your phone: Settings -> Wi-Fi, tap a
+   network you won't use again, and hit Forget. Fewer names shouted,
+   smaller trail.
+
+ * And leave "private/random MAC address" switched on. Modern phones now
+   use a different, made-up hardware address for each network so you
+   can't be followed shop to shop. It's on by default on recent iPhones
+   and Androids -- just don't turn it off when a captive portal nags you
+   to.
+
+Right. Now let's go and actually see it happening.
+
+------------------------------------------------------------------------
+[ 3. THE PROJECT ]
+
+SNIFF THE AIR
+
+We turn a cheap microcontroller into a passive Wi-Fi listener: first it
+maps the networks around you, then it catches the little "is anyone I
+know here?" calls your gadgets shout out -- the same trick real
+attackers use to profile a room. Everything here is receive-only. We
+listen; we don't transmit.
+
+What you'll need: any ESP32 dev board (about £4-6 -- an "ESP32-WROOM
+DevKit" is the common one), a USB cable, and the free Arduino IDE with
+the "esp32 by Espressif" boards package installed. Set Tools -> Board ->
+"ESP32 Dev Module", pick the port, and open the Serial Monitor at 115200
+baud after each upload.
+
+grab the sniffer sketch (.ino) [4]
+
+Or type them out below -- both sketches are short on purpose.
+
+>> 01. See the airwaves
+
+Start gentle. This just asks the chip "what networks can you hear?" and
+prints them -- signal strength, channel, and whether they're wide open.
+Flash it and open the Serial Monitor:
+
+    #include <WiFi.h>
+    
+    void setup() {
+      Serial.begin(115200);
+      WiFi.mode(WIFI_STA);          // station mode, but don't connect to anything
+      WiFi.disconnect();
+      delay(100);
+    }
+    
+    void loop() {
+      int n = WiFi.scanNetworks();
+      Serial.printf("\n-- %d networks in earshot --\n", n);
+      for (int i = 0; i < n; i++) {
+        bool open = WiFi.encryptionType(i) == WIFI_AUTH_OPEN;
+        Serial.printf("  %4d dBm  ch%-2d  %-6s  %s\n",
+          WiFi.RSSI(i), WiFi.channel(i),
+          open ? "OPEN!" : "locked", WiFi.SSID(i).c_str());
+      }
+      delay(5000);
+    }
+
+You've just built a radio-scanner that fits on a keyring. Every "OPEN!"
+is a network with no encryption at all -- fine for a menu QR code, a
+terrible place to check your bank.
+
+>> 02. Now listen closer
+
+Scanning is polite -- you're reading the shop signs. The next one is the
+eye-opener. We put the chip into promiscuous mode, where it hands us
+every raw frame in the air, and we pick out one kind: the probe request
+-- a device calling out "NETNAME, are you here?" to a network it
+remembers.
+
+    #include <WiFi.h>
+    #include "esp_wifi.h"
+    
+    void onPacket(void *buf, wifi_promiscuous_pkt_type_t type) {
+      auto *pkt = (wifi_promiscuous_pkt_t *)buf;
+      const uint8_t *f = pkt->payload;
+    
+      if (f[0] != 0x40) return;            // 0x40 = a probe request, ignore the rest
+    
+      const uint8_t *mac = f + 10;         // address 2 = who's asking
+      uint8_t len = f[25];                 // length of the network name they want
+      char ssid[33] = {0};
+      for (int i = 0; i < len && i < 32; i++) ssid[i] = f[26 + i];
+    
+      Serial.printf("%4d dBm  %02X:%02X:%02X:%02X:%02X:%02X  wants: \"%s\"\n",
+        pkt->rx_ctrl.rssi, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+        len ? ssid : "(anything out there?)");
+    }
+    
+    void setup() {
+      Serial.begin(115200);
+      WiFi.mode(WIFI_STA);
+      esp_wifi_set_promiscuous(true);
+      wifi_promiscuous_filter_t filter = { .filter_mask = WIFI_PROMIS_FILTER_MASK_MGMT };
+      esp_wifi_set_promiscuous_filter(&filter);
+      esp_wifi_set_promiscuous_rx_cb(&onPacket);
+    }
+    
+    void loop() {                          // hop channels so we hear the whole room
+      for (uint8_t ch = 1; ch <= 13; ch++) {
+        esp_wifi_set_channel(ch, WIFI_SECOND_CHAN_NONE);
+        delay(300);
+      }
+    }
+
+Leave it running for a minute in a busy-ish spot (your own home is
+plenty). The Serial Monitor fills with something like this:
+
+      -78 dBm  A4:83:E7:1C:22:0B  wants: "The Bull B&B"
+      -66 dBm  9C:B6:D0:44:19:7F  wants: "Premier Inn WiFi"
+      -66 dBm  9C:B6:D0:44:19:7F  wants: "CoffeeRepublic_Guest"
+      -66 dBm  9C:B6:D0:44:19:7F  wants: "BTHub6-K9QX"
+      -71 dBm  3E:A1:55:0C:88:12  wants: "(anything out there?)"
+
+Read the middle one. A single device (same MAC) is calling out three
+different network names -- a hotel, a coffee chain, a home hub. That's
+someone's phone reciting its recent history to the whole room, and it's
+how "creepy" location tracking in shops actually works: not magic, just
+listening. (You'll see fewer of these than you'd expect from newer
+phones -- MAC randomisation and quieter probing, the very fixes from the
+corner above, are why.)
+
+>> 03. The bit they don't advertise
+
+Here's the uncomfortable part, and the reason WPA3 matters. To keep you
+connected, your device and router constantly swap tiny management frames
+-- including one that means "you're disconnected now." Under WPA2,
+nobody signs those. So anyone nearby can forge a "disconnect" wearing
+your router's address and boot you off the network on demand. That's a
+deauth attack, and it's the engine inside most so-called "Wi-Fi
+jammers".
+
+The same little chip in your hand can send those frames. I'm
+deliberately not giving you that code -- doing it to a network you don't
+own is illegal (it's plain denial-of-service) and, frankly, the
+behaviour of a wally. The point is to understand the hole so you can
+shut it: WPA3, and its Protected Management Frames, sign those messages,
+and the forgery simply bounces. The attack this chip could do stops
+working the moment you turn WPA3 on -- which is why it's this week's
+news item. Seeing the weakness is the best possible argument for the
+fix.
+
+------------------------------------------------------------------------
+[ 4. YOUR TURN ]
+
+ * Turn the tool around and build a defender. Deauth frames are
+   management type 0x0C, so in the sniffer swap the test to if (f[0] ==
+   0xC0), count how many arrive in a few seconds, and blink the on-board
+   LED (GPIO 2) if there's a sudden burst. You've just built an
+   early-warning sensor for the attack -- without ever launching it.
+   Reply with your detector; the neatest one opens issue #06.
+
+------------------------------------------------------------------------
+
+A new one every other week -- free, no signup needed:
+  https://makebreak.co.uk/issues/
+
+No paywall, no ads, no sponsor telling me what to say. If an issue
+earned you a brew: https://buymeacoffee.com/androidacid
+
+  -- the Norfolk Hacker
+
+  prev: #04 Make it confess
+        https://makebreak.co.uk/issues/04.txt
+
+------------------------------------------------------------------------
+LINKS
+
+[1] https://www.forescout.com/blog/ot-network-security-threats-industrial-routers-under-attack/
+[2] https://www.cybersecuritydive.com/news/-botnet-exploits-tp-link-router/742319/
+[3] https://thehackernews.com/search/label/wifi%20hacking
+[4] https://makebreak.co.uk/patches/esp32-probe-sniffer.ino
+
+========================================================================
