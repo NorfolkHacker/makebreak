@@ -8,6 +8,13 @@
   <language>en-gb</language>
   <image><url>https://makebreak.co.uk/og.png</url><title>MAKE / BREAK</title><link>https://makebreak.co.uk/</link></image>
   <item>
+    <title>Issue #04 — Make it confess</title>
+    <link>https://makebreak.co.uk/issues/04.html</link>
+    <guid isPermaLink="true">https://makebreak.co.uk/issues/04.html</guid>
+    <pubDate>Tue, 29 Sep 2026 09:00:00 +0000</pubDate>
+    <description>This week's security in plain English, a beginner's superpower for spotting dodgy files, and the project: write a program that guards a password, then defeat it without ever running it.</description>
+  </item>
+  <item>
     <title>Issue #03 — Make Pure Data scream</title>
     <link>https://makebreak.co.uk/issues/03.html</link>
     <guid isPermaLink="true">https://makebreak.co.uk/issues/03.html</guid>

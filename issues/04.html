@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Issue #04 — Make it confess</title>
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAKE / BREAK">
+<meta property="og:title" content="Issue #04 — Make it confess">
+<meta property="og:description" content="MAKE / BREAK #04: this week in security, a beginner's superpower for spotting dodgy files, and the project — write a password-locked program, then defeat it without ever running it.">
+<meta property="og:url" content="https://makebreak.co.uk/issues/04.html">
+<meta property="og:image" content="https://makebreak.co.uk/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MAKE / BREAK — put the phone down, go make the machine misbehave">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="MAKE / BREAK #04: this week in security, a beginner's superpower for spotting dodgy files, and the project — write a password-locked program, then defeat it without ever running it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="issue.css">
+<style>
+  .term{background:#05070a;border:1px solid var(--line-strong);border-left:3px solid var(--break);border-radius:4px;margin:0 0 14px;overflow:hidden}
+  .term-head{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .term-title{color:var(--muted);font-size:12px;margin-left:6px}
+  .term pre{border:0;border-left:0;border-radius:0;margin:0;background:transparent}
+  .term .ok{color:var(--break);font-weight:700}
+  .term .no{color:var(--make)}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <a class="brand" href="/"><span class="b">MAKE</span> <span style="color:var(--faint)">/</span> <span class="s">BREAK</span></a>
+  <span class="barmeta">issue #04 · every other week<!--tx--> · <a href="04-text.html">text version</a><!--/tx--></span>
+</div></div>
+
+<header class="issue"><div class="wrap">
+  <div class="kicker"><span class="badge brk">BREAK</span><span>issue #04</span></div>
+  <h1>Make it <span class="em">confess</span></h1>
+  <p class="dek">This week's security in plain English, a beginner's superpower for spotting dodgy files, and the project: write a program that guards a password — then defeat it without ever once running it.</p>
+  <p class="toc">this week in security<span class="sep">·</span>beginner's corner<span class="sep">·</span>the project<span class="sep">·</span>your turn</p>
+</div></header>
+
+<article><div class="wrap">
+  <p>Back to the BREAK side. Last issue you built a thing that plays itself; today you take a thing
+  apart and make it hand over a secret it was built to keep. Two ground rules: it's <em>your</em>
+  program, on <em>your</em> machine, and we win <em>without running it</em>. Reading beats guessing —
+  that's the whole trade.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> this week in security</h2>
+  <p class="seg-note">Three quick ones — the theme is "the gap between what a thing claims and what
+  it actually does."</p>
+
+  <div class="card">
+    <p><strong>The gap between "patched" and "safe" is now hours.</strong> GitLab shipped a
+    maximum-severity fix and watched attackers probe for it within hours of the announcement; Citrix
+    confirmed critical bugs in its NetScaler gateways being exploited in the wild — including boxes
+    running the default config. A fix you haven't applied is just a public map to the hole.</p>
+    <p><span class="do">→ do this:</span> turn on automatic updates for anything that faces the
+    internet — router, NAS, phone, browser. The window between "fix announced" and "you're a target"
+    has shrunk to about a working day.
+    <span class="src"><a href="https://thehackernews.com/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Your AI helper will reach whatever you let it.</strong> Google confirmed its Gemini
+    models touched three real companies' systems during an internal exercise after a config slip left
+    the sandbox wired to the open internet; separately, an AI agent got around access controls to read
+    non-public government data. Not malice — just a machine using every scrap of access it was given.</p>
+    <p><span class="do">→ do this:</span> when you hand an AI tool your files, accounts or shell, assume
+    it will use all of it. Give it the least it needs, in a folder it can't climb out of. Good
+    intentions are not a permission model.
+    <span class="src"><a href="https://www.securityweek.com/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Another month, another pile of your data.</strong> A jobs portal defaced, tens of
+    millions of ID records touted for sale, an airport group admitting customer details were accessed.
+    Assume the boring truth: your name, email and probably more are already in someone else's
+    spreadsheet.</p>
+    <p><span class="do">→ do this:</span> that's not doom, it's a to-do. Unique passwords plus 2FA mean
+    a single leaked password opens nothing. Which brings us neatly to the corner.
+    <span class="src"><a href="https://www.brightdefense.com/resources/recent-data-breaches/" target="_blank" rel="noopener">(source)</a></span></p>
+  </div>
+
+  <h2 class="seg"><span class="ph">&gt;</span> beginner's corner</h2>
+  <p class="seg-note">Today's project reads what a program <em>actually does</em>. Here's the
+  no-tools-required version of that same superpower.</p>
+  <div class="tip"><p><b>Meet VirusTotal (virustotal.com).</b> Got a file or a link you're not sure
+  about? Drop it in. It runs the thing past ~70 antivirus engines at once and shows you what's inside —
+  the web addresses it reaches for, the text buried in it, how it behaves. Free, trusted, no account
+  needed. Do this before you open a "just this once" download.</p></div>
+  <div class="tip"><p><b>One rule: never upload anything private.</b> Whatever you submit can be seen by
+  other researchers, so it's for suspicious downloads and dodgy links — not your tax return. For your
+  own files, you're about to learn to read them yourself.</p></div>
+  <p>That's the tourist version. Now let's do it properly, by hand, on a program we wrote to keep a
+  secret from us.</p>
+
+  <h2 class="proj">The project — make it confess</h2>
+  <p class="seg-note">We write a tiny program that guards a password, then defeat it three ways —
+  and never once run it to guess. Roughly fifteen lines of C. You'll need a compiler (<code>gcc</code>
+  or <code>clang</code>; on Windows, WSL or MSYS2) and the tools that already ship right beside it.</p>
+
+  <a class="dl" href="/patches/gate.c" download>↓ grab gate.c</a>
+  <p class="cap">Or just type it out — that's rather the point. Everything below runs on Linux, macOS
+  and WSL as-is.</p>
+
+  <h3><span class="n">01</span>Build the lock</h3>
+  <p>Save this as <code>gate.c</code>. It asks for a password and, it reckons, keeps that password to
+  itself.</p>
+  <pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char buf[64];
+    printf("password: ");
+    if (!fgets(buf, sizeof buf, stdin)) return 1;
+    buf[strcspn(buf, "\n")] = 0;              /* chop the newline */
+
+    /* the "secret", lightly scrambled so it isn't sitting in plain sight */
+    unsigned char key[] = { 0x47,0x4b,0x41,0x4f,0x48,0x58,0x4f,0x4b,0x41, 0 };
+
+    int ok = (strlen(buf) == 9);
+    for (int i = 0; i &lt; 9; i++)
+        if (((unsigned char)buf[i] ^ 0x2a) != key[i]) ok = 0;
+
+    puts(ok ? "ACCESS GRANTED" : "nope.");
+    return !ok;
+}</code></pre>
+  <p>Compile it with the optimiser <em>off</em> (<code>-O0</code>) so the code stays readable, then try
+  the front door:</p>
+  <div class="term">
+    <div class="term-head"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span class="term-title">~/gate — it will not just tell you</span></div>
+    <pre><code>$ gcc -O0 -o gate gate.c
+$ ./gate
+password: letmein
+<span class="no">nope.</span>
+$ ./gate
+password: hunter2
+<span class="no">nope.</span></code></pre>
+  </div>
+  <p>Right. It's not going to simply cough it up. Or is it.</p>
+
+  <h3><span class="n">02</span>strings — the free win</h3>
+  <p>Every compiled program is stuffed with readable text: prompts, error messages, URLs.
+  <code>strings</code> prints all of it, and it's the first thing you run, every single time:</p>
+  <pre><code>$ strings gate | grep -iE 'pass|access|nope'
+password:
+ACCESS GRANTED
+nope.</code></pre>
+  <p>There's the entire script of the play — every line the program can say — and we never ran it. The
+  password itself isn't here (I scrambled it on purpose; plenty of real software isn't so careful, and
+  the secret genuinely is sitting there in plain text). But look what we already have: a hidden success
+  message, <code>ACCESS GRANTED</code>, that we never managed to trigger. The program just admitted
+  there's a door. Now we go and read the lock.</p>
+
+  <h3><span class="n">03</span>objdump — read the actual logic</h3>
+  <p><code>objdump -d</code> disassembles the binary: it turns the machine code back into human-ish
+  assembly. We want the <code>main</code> function:</p>
+  <pre><code>$ objdump -d -M intel gate | grep -A40 '&lt;main&gt;:'</code></pre>
+  <p>Skip the boilerplate and three lines do all the talking:</p>
+  <pre><code>cmp    rax,0x9                    ; the password is 9 characters long
+movabs rax,0x4b4f58484f414b47    ; eight bytes of "the answer"...
+mov    WORD PTR [rbp-0x52],0x41   ; ...and the ninth
+xor    eax,0x2a                   ; each of YOUR characters gets XORed with 0x2a
+cmp    dl,al                      ; ...then compared against a byte of the answer</code></pre>
+  <p>Read it back in English: take your input, XOR every byte with <code>0x2a</code>, and check it
+  matches that fixed list of bytes. And XOR is its own undo — do it to something twice and you're back
+  where you started. So to get the answer, we take the program's own byte list and XOR it back.</p>
+
+  <h3><span class="n">04</span>Recover it (and the gentler view)</h3>
+  <p>The byte list is <code>47 4b 41 4f 48 58 4f 4b</code> — that <code>movabs</code> is little-endian,
+  so read it right-to-left — followed by <code>41</code>. XOR each with <code>0x2a</code>:</p>
+  <pre><code>$ python3 -c "print(bytes(b ^ 0x2a for b in bytes.fromhex('474b414f48584f4b41')).decode())"
+makebreak</code></pre>
+  <p>And the moment of truth:</p>
+  <div class="term">
+    <div class="term-head"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span><span class="term-title">~/gate — read, don't guess</span></div>
+    <pre><code>$ ./gate
+password: makebreak
+<span class="ok">ACCESS GRANTED</span></code></pre>
+  </div>
+  <p>We never guessed. We read what the program does and worked backwards to what it wants. If
+  assembly makes your eyes cross, do exactly this in <strong>Ghidra</strong> (free, from the NSA of all
+  places) or <strong>radare2</strong>: open the binary, jump to <code>main</code>, and the decompiler
+  hands you back something close to the original C — the XOR and the byte table right there in near-plain
+  code. Same lesson, comfier chair.</p>
+  <p>That's the whole discipline in one sitting: a program's real behaviour lives in the binary, not on
+  the label. <strong>"It's compiled" is not "it's secret."</strong> Anything shipped to your machine —
+  the check that says you've paid, the flag that says you're an admin, the key hidden "safely" inside the
+  app — is yours to read.</p>
+
+  <h2 class="seg"><span class="ph">&gt;</span> your turn</h2>
+  <div class="card">
+    <p>Don't recover the password — <strong>remove the lock entirely.</strong> Somewhere in that
+    disassembly is a single conditional jump that decides granted-versus-nope. Flip it — with a hex
+    editor, or by recompiling with the check inverted — so that <em>any</em> password gets you in.
+    Reply and tell me which byte you changed (no spoilers for anyone else). Sharpest patch opens
+    issue #05.</p>
+  </div>
+
+  <div class="sub">
+    <h3>Stop scrolling. <span class="m">Start</span> <span class="b">making.</span></h3>
+    <p>A new one every other week — free, right here, no signup needed. Rather it came to you? Your call.</p>
+    <a class="cta" href="/#join">Get it by email ▚</a> <a class="rss" href="/feed.xml">or RSS</a>
+    <p class="signoff">— the <span class="b">Norfolk</span> <span class="m">Hacker</span></p>
+    <p class="tip">No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid" target="_blank" rel="noopener">☕ buy me a coffee</a> — it keeps the soldering iron hot.</p>
+  </div>
+
+  <nav class="foot-nav"><a href="03.html">← #03 Make Pure Data scream</a><a href="/issues/">all issues →</a></nav>
+</div></article>
+</body>
+</html>

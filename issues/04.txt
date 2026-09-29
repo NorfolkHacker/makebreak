@@ -1,0 +1,229 @@
+========================================================================
+  MAKE / BREAK                                                 issue #04
+  MAKE IT CONFESS
+  BREAK - 29 Sep 2026 - by the Norfolk Hacker
+========================================================================
+
+  This week's security in plain English, a beginner's superpower for
+  spotting dodgy files, and the project: write a program that guards a
+  password -- then defeat it without ever once running it.
+
+  colour edition: https://makebreak.co.uk/issues/04.html
+
+Back to the BREAK side. Last issue you built a thing that plays itself;
+today you take a thing apart and make it hand over a secret it was built
+to keep. Two ground rules: it's your program, on your machine, and we
+win without running it. Reading beats guessing -- that's the whole
+trade.
+
+------------------------------------------------------------------------
+[ 1. THIS WEEK IN SECURITY ]
+
+Three quick ones -- the theme is "the gap between what a thing claims
+and what it actually does."
+
+ * The gap between "patched" and "safe" is now hours. GitLab shipped a
+   maximum-severity fix and watched attackers probe for it within hours
+   of the announcement; Citrix confirmed critical bugs in its NetScaler
+   gateways being exploited in the wild -- including boxes running the
+   default config. A fix you haven't applied is just a public map to the
+   hole.
+
+   -> do this: turn on automatic updates for anything that faces the
+   internet -- router, NAS, phone, browser. The window between "fix
+   announced" and "you're a target" has shrunk to about a working day.
+   (source) [1]
+
+ * Your AI helper will reach whatever you let it. Google confirmed its
+   Gemini models touched three real companies' systems during an
+   internal exercise after a config slip left the sandbox wired to the
+   open internet; separately, an AI agent got around access controls to
+   read non-public government data. Not malice -- just a machine using
+   every scrap of access it was given.
+
+   -> do this: when you hand an AI tool your files, accounts or shell,
+   assume it will use all of it. Give it the least it needs, in a folder
+   it can't climb out of. Good intentions are not a permission model.
+   (source) [2]
+
+ * Another month, another pile of your data. A jobs portal defaced, tens
+   of millions of ID records touted for sale, an airport group admitting
+   customer details were accessed. Assume the boring truth: your name,
+   email and probably more are already in someone else's spreadsheet.
+
+   -> do this: that's not doom, it's a to-do. Unique passwords plus 2FA
+   mean a single leaked password opens nothing. Which brings us neatly
+   to the corner. (source) [3]
+
+------------------------------------------------------------------------
+[ 2. BEGINNER'S CORNER ]
+
+Today's project reads what a program actually does. Here's the
+no-tools-required version of that same superpower.
+
+ * Meet VirusTotal (virustotal.com). Got a file or a link you're not
+   sure about? Drop it in. It runs the thing past ~70 antivirus engines
+   at once and shows you what's inside -- the web addresses it reaches
+   for, the text buried in it, how it behaves. Free, trusted, no account
+   needed. Do this before you open a "just this once" download.
+
+ * One rule: never upload anything private. Whatever you submit can be
+   seen by other researchers, so it's for suspicious downloads and dodgy
+   links -- not your tax return. For your own files, you're about to
+   learn to read them yourself.
+
+That's the tourist version. Now let's do it properly, by hand, on a
+program we wrote to keep a secret from us.
+
+------------------------------------------------------------------------
+[ 3. THE PROJECT ]
+
+MAKE IT CONFESS
+
+We write a tiny program that guards a password, then defeat it three
+ways -- and never once run it to guess. Roughly fifteen lines of C.
+You'll need a compiler (gcc or clang; on Windows, WSL or MSYS2) and the
+tools that already ship right beside it.
+
+grab gate.c [4]
+
+Or just type it out -- that's rather the point. Everything below runs on
+Linux, macOS and WSL as-is.
+
+>> 01. Build the lock
+
+Save this as gate.c. It asks for a password and, it reckons, keeps that
+password to itself.
+
+    #include <stdio.h>
+    #include <string.h>
+    
+    int main(void) {
+        char buf[64];
+        printf("password: ");
+        if (!fgets(buf, sizeof buf, stdin)) return 1;
+        buf[strcspn(buf, "\n")] = 0;              /* chop the newline */
+    
+        /* the "secret", lightly scrambled so it isn't sitting in plain sight */
+        unsigned char key[] = { 0x47,0x4b,0x41,0x4f,0x48,0x58,0x4f,0x4b,0x41, 0 };
+    
+        int ok = (strlen(buf) == 9);
+        for (int i = 0; i < 9; i++)
+            if (((unsigned char)buf[i] ^ 0x2a) != key[i]) ok = 0;
+    
+        puts(ok ? "ACCESS GRANTED" : "nope.");
+        return !ok;
+    }
+
+Compile it with the optimiser off (-O0) so the code stays readable, then
+try the front door:
+
+    $ gcc -O0 -o gate gate.c
+    $ ./gate
+    password: letmein
+    nope.
+    $ ./gate
+    password: hunter2
+    nope.
+
+Right. It's not going to simply cough it up. Or is it.
+
+>> 02. strings -- the free win
+
+Every compiled program is stuffed with readable text: prompts, error
+messages, URLs. strings prints all of it, and it's the first thing you
+run, every single time:
+
+    $ strings gate | grep -iE 'pass|access|nope'
+    password:
+    ACCESS GRANTED
+    nope.
+
+There's the entire script of the play -- every line the program can say
+-- and we never ran it. The password itself isn't here (I scrambled it
+on purpose; plenty of real software isn't so careful, and the secret
+genuinely is sitting there in plain text). But look what we already
+have: a hidden success message, ACCESS GRANTED, that we never managed to
+trigger. The program just admitted there's a door. Now we go and read
+the lock.
+
+>> 03. objdump -- read the actual logic
+
+objdump -d disassembles the binary: it turns the machine code back into
+human-ish assembly. We want the main function:
+
+    $ objdump -d -M intel gate | grep -A40 '<main>:'
+
+Skip the boilerplate and three lines do all the talking:
+
+    cmp    rax,0x9                    ; the password is 9 characters long
+    movabs rax,0x4b4f58484f414b47    ; eight bytes of "the answer"...
+    mov    WORD PTR [rbp-0x52],0x41   ; ...and the ninth
+    xor    eax,0x2a                   ; each of YOUR characters gets XORed with 0x2a
+    cmp    dl,al                      ; ...then compared against a byte of the answer
+
+Read it back in English: take your input, XOR every byte with 0x2a, and
+check it matches that fixed list of bytes. And XOR is its own undo -- do
+it to something twice and you're back where you started. So to get the
+answer, we take the program's own byte list and XOR it back.
+
+>> 04. Recover it (and the gentler view)
+
+The byte list is 47 4b 41 4f 48 58 4f 4b -- that movabs is
+little-endian, so read it right-to-left -- followed by 41. XOR each with
+0x2a:
+
+    $ python3 -c "print(bytes(b ^ 0x2a for b in bytes.fromhex('474b414f48584f4b41')).decode())"
+    makebreak
+
+And the moment of truth:
+
+    $ ./gate
+    password: makebreak
+    ACCESS GRANTED
+
+We never guessed. We read what the program does and worked backwards to
+what it wants. If assembly makes your eyes cross, do exactly this in
+Ghidra (free, from the NSA of all places) or radare2: open the binary,
+jump to main, and the decompiler hands you back something close to the
+original C -- the XOR and the byte table right there in near-plain code.
+Same lesson, comfier chair.
+
+That's the whole discipline in one sitting: a program's real behaviour
+lives in the binary, not on the label. "It's compiled" is not "it's
+secret." Anything shipped to your machine -- the check that says you've
+paid, the flag that says you're an admin, the key hidden "safely" inside
+the app -- is yours to read.
+
+------------------------------------------------------------------------
+[ 4. YOUR TURN ]
+
+ * Don't recover the password -- remove the lock entirely. Somewhere in
+   that disassembly is a single conditional jump that decides
+   granted-versus-nope. Flip it -- with a hex editor, or by recompiling
+   with the check inverted -- so that any password gets you in. Reply
+   and tell me which byte you changed (no spoilers for anyone else).
+   Sharpest patch opens issue #05.
+
+------------------------------------------------------------------------
+
+A new one every other week -- free, no signup needed:
+  https://makebreak.co.uk/issues/
+
+No paywall, no ads, no sponsor telling me what to say. If an issue
+earned you a brew: https://buymeacoffee.com/androidacid
+
+  -- the Norfolk Hacker
+
+  prev: #03 Make Pure Data scream
+        https://makebreak.co.uk/issues/03.txt
+
+------------------------------------------------------------------------
+LINKS
+
+[1] https://thehackernews.com/
+[2] https://www.securityweek.com/
+[3] https://www.brightdefense.com/resources/recent-data-breaches/
+[4] https://makebreak.co.uk/patches/gate.c
+
+========================================================================

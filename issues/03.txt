@@ -136,6 +136,8 @@ earned you a brew: https://buymeacoffee.com/androidacid
 
   prev: #02 Recon that isn't a checklist
         https://makebreak.co.uk/issues/02.txt
+  next: #04 Make it confess
+        https://makebreak.co.uk/issues/04.txt
 
 ------------------------------------------------------------------------
 LINKS
