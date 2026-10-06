@@ -309,7 +309,7 @@ def render_txt(m, date, bl):
 
     nav = [b[1] for b in bl if b[0] == "nav"]
     foot = [thin, "",
-            wrap("A new one every other week -- free, no signup needed:"),
+            wrap("A new one every other week -- free, right here:"),
             f"  {BASE}/issues/", "",
             wrap("No paywall, no ads, no sponsor telling me what to say. If an issue earned "
                  f"you a brew: {COFFEE}"),
@@ -377,7 +377,7 @@ PAGE = """<!doctype html>
 <p><em>{dek}</em></p>
 {body}
 <footer>
-<p>A new one every other week — free, no signup needed. Follow along via <a href="/feed.xml">RSS</a>.</p>
+<p>A new one every other week — free, right here. Follow along via <a href="/feed.xml">RSS</a>.</p>
 <p>No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="{coffee}">buy me a coffee</a>.</p>
 <p>— the Norfolk Hacker</p>
 {nav}
