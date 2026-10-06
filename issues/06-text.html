@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Issue #06 — Boot your own OS (text edition)</title>
+<meta name="description" content="Plain-text edition of MAKE / BREAK #06: no bright colours, no effects.">
+<link rel="canonical" href="https://makebreak.co.uk/issues/06.html">
+<link rel="alternate" type="text/plain" href="06.txt">
+<link rel="alternate" type="application/rss+xml" title="MAKE / BREAK" href="/feed.xml">
+<style>
+  :root{--bg:#fbfaf6;--ink:#1c1c1a;--muted:#4d4d48;--line:#d8d6cf;--code:#f0eee8;--link:#1d3f8f}
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#161616;--ink:#dcdcd6;--muted:#a9a9a2;--line:#353533;--code:#222221;--link:#9fbcf5}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 Georgia,"Iowan Old Style","Times New Roman",serif}
+  main,nav.top{max-width:68ch;margin:0 auto;padding:0 16px}
+  nav.top{padding-block:14px;border-bottom:1px solid var(--line);font:0.95rem/1.5 system-ui,sans-serif;color:var(--muted);max-width:none}
+  nav.top div{max-width:calc(68ch - 32px);margin:0 auto;display:flex;flex-wrap:wrap;gap:6px 18px}
+  a{color:var(--link);text-underline-offset:2px}
+  h1{font-size:2rem;line-height:1.2;margin:36px 0 6px}
+  .meta{color:var(--muted);font:0.95rem/1.5 system-ui,sans-serif;margin:0 0 18px}
+  h2{font-size:1.4rem;margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+  h3{font-size:1.15rem;margin:30px 0 8px}
+  .item{border-left:3px solid var(--line);padding-left:16px;margin:18px 0}
+  .item p:first-child{margin-top:0}
+  code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.92em}
+  code{background:var(--code);padding:1px 4px;border-radius:3px}
+  pre{background:var(--code);padding:14px 16px;overflow-x:auto;border-radius:4px;line-height:1.5}
+  pre code{background:none;padding:0}
+  .demo{color:var(--muted);font-style:italic}
+  footer{margin:48px 0;padding-top:18px;border-top:1px solid var(--line)}
+  footer nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-family:system-ui,sans-serif;font-size:0.95rem}
+</style>
+</head>
+<body>
+<nav class="top"><div><a href="/">MAKE / BREAK</a><a href="/issues/text.html">all text editions</a><a href="06.html">colour edition</a><a href="06.txt">raw .txt</a></div></nav>
+<main>
+<h1>#06 — Boot your own OS</h1>
+<p class="meta">MAKE · 27 Oct 2026 · by the Norfolk Hacker</p>
+<p><em>This week&#x27;s security in plain English, a two-minute check on what your phone&#x27;s apps can reach, and the project: boot a tiny operating system I built, then bring the plasma from #00 back to life as one of its apps.</em></p>
+<p>Two BREAK issues on the bounce, so we're owed a proper MAKE. And this one's a bit personal: for the last few weeks I've been building an operating system. A small one — desktop, windows, a terminal, a tracker, a handful of games — called <strong>acid OS</strong>. Today you boot it, write an app for it, and then crash that app on purpose to see why the rest of the system doesn't care. It's free, it's open source, and you don't need to flash anything.</p>
+<h2>This week in security</h2>
+<p>Three quick ones — and a theme you'll spot again in the project: keep things in separate boxes.</p>
+<div class="item">
+<p><strong>A robot broke into a security charity — on its own.</strong> On 21 September an autonomous AI agent, with no human driving it, chained two unknown bugs in Zammad (a popular open-source helpdesk) and got root on a server at DIVD, the Dutch volunteer group that literally warns people about vulnerabilities. DIVD called it "loud and very, very messy" — it even tripped over its own password-spraying. What stopped it going further wasn't cleverness: their network was split into compartments.</p>
+<p>→ do this: if you run anything at home that faces the internet — a NAS, a Plex box, a little server — switch on its automatic updates, and put it on its own network (your router's "guest" Wi-Fi will do). One break-in, one room. <a href="https://www.helpnetsecurity.com/?p=386522">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>Police took down a ransomware gang allegedly run by a 16-year-old.</strong> Operation KillSwitch, on 30 September, seized KillSec's servers and leak site — and at least 110 terabytes of stolen data — after around 1,000 attacks. Searches took place in four countries, the UK among them.</p>
+<p>→ do this: the thing that makes ransomware toothless is a backup the attacker can't reach. Copy the photos and documents you'd cry over to an external drive this weekend, then <em>unplug it</em>. <a href="https://www.securityweek.com/police-shut-down-killsec-ransomware-identify-alleged-teen-leader">(source)</a></p>
+</div>
+<div class="item">
+<p><strong>Chrome patched a bug that attackers were already using.</strong> CVE-2026-85046, a flaw in Chrome's JavaScript engine, let a booby-trapped web page run code on your machine — and Google confirmed it was being exploited in the wild. Fixed in Chrome 152.</p>
+<p>→ do this: in Chrome go to <strong>⋮ → Help → About Google Chrome</strong>. If it says "Relaunch", the fix is sitting there doing nothing until you click it. <a href="https://thehackernews.com/2026/09/google-releases-chrome-update-to-patch.html">(source)</a></p>
+</div>
+<h2>Beginner&#x27;s corner</h2>
+<p>Today's project is all about apps that live in their own little box. Your phone already works that way — the trick is checking what each box is allowed to reach.</p>
+<div class="item">
+<p><strong>Do a two-minute permissions audit.</strong> On an iPhone open <strong>Settings → Privacy &amp; Security</strong>; on Android, search Settings for <strong>Permission manager</strong>. Tap <strong>Location</strong>, then <strong>Microphone</strong>, then <strong>Camera</strong>. Anything that doesn't obviously need it — a torch app with your location, a game with your microphone — set it to <strong>Never</strong> or <strong>Ask every time</strong>. An app can't leak what it was never given.</p>
+</div>
+<h2>The project: boot your own OS</h2>
+<p>acid OS runs <em>in a window</em> on your Linux desktop, so nothing gets installed over anything. You'll boot it, give it a new app, then break that app and watch the OS shrug.</p>
+<p><strong>What you'll need:</strong> a Linux machine with a desktop (X11 or Wayland — any distro), about ten minutes for the first build, and a willingness to type <code>cargo</code>.</p>
+<p><a href="https://github.com/NorfolkHacker/Acid-OS-V3">↗ acid OS on GitHub</a></p>
+<p>Prefer to grab the finished app? <a href="/patches/plasma.lua">plasma.lua</a> and <a href="/patches/plasma.app.toml">plasma.app.toml</a> — drop both into <code>v3/apps/</code>.</p>
+<h3>01. Boot it</h3>
+<p>Install the build tools (Debian/Ubuntu shown — the Fedora and Arch lines are in the repo's README):</p>
+<pre><code>sudo apt install build-essential pkg-config libasound2-dev git curl
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source "$HOME/.cargo/env"</code></pre>
+<p>Then grab it and run it:</p>
+<pre><code>git clone https://github.com/NorfolkHacker/Acid-OS-V3.git
+cd Acid-OS-V3
+cargo run --release --manifest-path v3/Cargo.toml -p acid-os</code></pre>
+<p>The first build takes a few minutes; after that it boots in seconds. Pick a screen size (or just wait three seconds) and you're on the desktop. Have a poke: <strong>Menu</strong> is top left, and the <strong>File Manager → Games</strong> folder has AcidStorm, Acid Invaders and a Tetris that will eat your evening. Stay in the top folder of the repo when you run it — acid OS finds its apps by a path relative to it.</p>
+<h3>02. Bring the plasma back</h3>
+<p>Remember the plasma from <a href="00-text.html">issue #00</a> — four sine waves stacked into something that looks alive? We're giving it a home. An acid OS app is just <strong>two files</strong> in <code>v3/apps/</code>: a Lua script, and a tiny "manifest" saying what it's called and how big its window is.</p>
+<p><code>v3/apps/plasma.app.toml</code></p>
+<pre><code>name = Plasma
+w = 240
+h = 176
+desc = Issue #00's plasma, now an app</code></pre>
+<p><code>v3/apps/plasma.lua</code></p>
+<pre><code>local Plasma = AcidGame:extend("Plasma")
+Plasma.TICK_MS = 40              -- 25 frames a second
+
+local CELL = 4                   -- each "pixel" is a 4x4 block
+local TOP = 16                   -- the title bar is 16px tall
+
+function Plasma:on_create()
+  self.w, self.h = acid_window_size()
+  self.cx, self.cy = self.w // 2, self.h // 2   -- where the ripple starts
+  self.t = 0
+end
+
+function Plasma:on_touch(x, y, pressed)
+  if pressed then self.cx, self.cy = x, y end   -- drag the ripple about
+end
+
+function Plasma:on_tick()
+  self.t = self.t + 0.08
+  if not self:focused() then return end
+
+  local t, cx, cy = self.t, self.cx, self.cy
+  acid_begin_frame()
+  acid_draw_window_frame(self:window_title())
+  for y = TOP, self.h - 1, CELL do
+    for x = 0, self.w - 1, CELL do
+      -- the same four ripples as issue #00, stacked
+      local v = math.sin(x * 0.04 + t)
+              + math.sin(y * 0.03 - t)
+              + math.sin((x + y) * 0.03 + t)
+              + math.sin(math.sqrt((x - cx)^2 + (y - cy)^2) * 0.04 - t * 1.5)
+      -- v runs from -4 to 4: turn it into a spot on the 256-colour wheel
+      acid_fill_rect(x, y, CELL, CELL, AcidPalette.hue(math.floor(v * 32 + t * 20)))
+    end
+  end
+  acid_draw_window_border()
+  acid_end_frame()
+end
+
+Plasma:new():start()</code></pre>
+<p>Run it straight into the desktop:</p>
+<pre><code>cargo run --release --manifest-path v3/Cargo.toml -p acid-os -- --app plasma</code></pre>
+<p>The real thing: acid OS at 640×480, plasma window up front.</p>
+<p>There it is — the plasma, in a window, in an OS. Click and drag inside it and the ripple follows you. What's going on:</p>
+<h3>03. Now break it (on purpose)</h3>
+<p>This is the bit I'm proudest of. Add one line at the top of <code>on_tick</code> — a loop that never ends:</p>
+<pre><code>  while true do end</code></pre>
+<p>Run it again. The plasma freezes… and about two seconds later its window just <em>goes</em>. Look in the terminal you launched from:</p>
+<pre><code>Acid OS v3: v3/apps/plasma.lua: stopped responding</code></pre>
+<p>Everything else — desktop, clock, any games you had open — carried on as if nothing happened. That's because <strong>every app gets its own Lua brain on its own thread</strong>, and the OS keeps a stopwatch on each one. Hog it for more than two seconds and you're out. (Try <code>error("boom")</code> instead and you'll get your own message in the same spot.) Real operating systems do exactly this, just with more paperwork — it's the same "one break-in, one room" idea as this week's news. Take the line back out before you carry on.</p>
+<h2>Your turn</h2>
+<div class="item">
+<p><strong>Fold it.</strong> <a href="01-text.html">Issue #01</a> turned the plasma into a kaleidoscope with one line — measure from the centre and mirror it with <code>math.abs</code>. Do the same here: before the sums, swap <code>x</code> and <code>y</code> for <code>math.abs(x - self.w // 2)</code> and <code>math.abs(y - self.h // 2)</code> and watch it go symmetrical. Then make it <strong>sing</strong>: in <code>on_touch</code>, play a note whose pitch follows your finger (<code>acid_play_note(0, 30 + y // 4, 60)</code> on press, <code>acid_stop_note(0)</code> on release — chapter 5 of the manual in <code>docs/manual-v3/</code> has the rest). Built something good? Open a pull request on the repo with your app in <code>v3/apps/</code> — the neatest one ships with acid OS.</p>
+</div>
+<footer>
+<p>A new one every other week — free, right here. Follow along via <a href="/feed.xml">RSS</a>.</p>
+<p>No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="https://buymeacoffee.com/androidacid">buy me a coffee</a>.</p>
+<p>— the Norfolk Hacker</p>
+<nav><a href="05-text.html">← #05 Sniff the air</a><a href="/issues/text.html">all issues →</a></nav>
+</footer>
+</main>
+</body>
+</html>

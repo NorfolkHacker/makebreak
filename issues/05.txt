@@ -228,6 +228,8 @@ earned you a brew: https://buymeacoffee.com/androidacid
 
   prev: #04 Make it confess
         https://makebreak.co.uk/issues/04.txt
+  next: #06 Boot your own OS
+        https://makebreak.co.uk/issues/06.txt
 
 ------------------------------------------------------------------------
 LINKS
