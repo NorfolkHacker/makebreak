@@ -377,7 +377,7 @@ PAGE = """<!doctype html>
 <p><em>{dek}</em></p>
 {body}
 <footer>
-<p>A new one every other week — free, no signup needed. Rather it came to you? <a href="/#join">Email</a> or <a href="/feed.xml">RSS</a>.</p>
+<p>A new one every other week — free, no signup needed. Follow along via <a href="/feed.xml">RSS</a>.</p>
 <p>No paywall, no ads, no sponsor telling me what to say. If an issue earned you a brew, <a href="{coffee}">buy me a coffee</a>.</p>
 <p>— the Norfolk Hacker</p>
 {nav}

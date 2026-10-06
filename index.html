@@ -17,28 +17,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="A biweekly zine for people who make and break real things — against the doomscroll, against the slop.">
 
-<!--
-  ============================================================================
-  PUBLIC, SHAREABLE landing page. Host it free anywhere:
-    - Netlify: drag this file onto app.netlify.com/drop
-    - GitHub Pages: commit as index.html
-    - Beehiiv: paste into a custom landing page block
-  Unlike the private artifact, THIS link you can post publicly.
-
-  >>> ONE THING TO DO: connect the signup form to your email platform. <<<
-  Recommended: Kit / ConvertKit (free up to 10,000 subscribers).
-  1. In Kit: Grow -> Landing Pages & Forms -> create a Form -> publish.
-  2. Open the form's Embed -> HTML snippet. Copy the <form action="..."> URL
-     (looks like https://app.kit.com/forms/XXXXXX/subscriptions).
-  3. Paste it below where it says PASTE_FORM_ACTION_URL.
-  4. The email <input> is name="email_address" (Kit's field) — leave it as is.
-     (If you use a different ESP, match ITS field name: many use "email".)
-  5. Load the page, submit a test email, confirm the subscriber appears.
-
-  Fallback that always works: paste your platform's official iframe/embed
-  snippet in place of the <form>...</form> block (you lose a little styling).
-  ============================================================================
--->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,23 +106,6 @@
   .issue .badge{font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;border-radius:2px;border:1px solid var(--line-strong);white-space:nowrap}
   .issue.make .badge{color:var(--make);border-color:rgba(255,73,207,.4)}
   .issue.break .badge{color:var(--break);border-color:rgba(43,245,160,.4)}
-  .join{background:linear-gradient(180deg,rgba(255,73,207,.04),rgba(0,0,0,0))}
-  .join h2{font-family:var(--display);text-transform:uppercase;font-size:clamp(34px,7vw,64px);letter-spacing:.02em;margin:0 0 8px;line-height:.95}
-  .join h2 .make{color:var(--make)} .join h2 .break{color:var(--break)}
-  .join .sub{color:var(--muted);max-width:56ch;margin:0 0 28px}
-  .form{border:1px solid var(--line-strong);border-radius:4px;background:var(--ground);padding:20px;max-width:640px}
-  .form-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line-strong);border-radius:3px;background:var(--surface);padding:4px 4px 4px 14px}
-  .form-row .p{color:var(--make);font-weight:700;flex:none}
-  .form input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--ink);font-family:var(--mono);font-size:15px;padding:12px 6px}
-  .form input::placeholder{color:var(--faint)}
-  .form button{flex:none;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.03em;border:0;border-radius:2px;padding:12px 20px;cursor:pointer;background:var(--make);color:var(--ground);transition:box-shadow .15s ease,transform .08s ease}
-  .form button:hover{box-shadow:0 0 0 3px rgba(255,73,207,.2);transform:translateY(-1px)}
-  .msg{margin-top:14px;font-size:13.5px;color:var(--muted)}
-  .modal-backdrop{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,6,5,.72)}
-  .modal-term{max-width:460px;width:100%}
-  .modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
-  @media (prefers-reduced-motion: no-preference){.modal-term{animation:pop .18s ease-out}}
-  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
   footer{border-top:1px solid var(--line);padding-block:40px 56px;color:var(--muted);font-size:13px}
   footer .big{font-family:var(--display);text-transform:uppercase;color:var(--ink);font-size:clamp(30px,7vw,58px);letter-spacing:.03em;line-height:.95;margin:0 0 20px}
   footer .big .make{color:var(--make)} footer .big .break{color:var(--break)}
@@ -191,7 +152,7 @@
     <a href="/issues/04.html"><div class="issue break"><div class="no">04</div><div><div class="ti">Make it confess</div><div class="de">Write a program that guards a password, then defeat it without ever running it.</div></div><div class="badge">break</div></div></a>
     <a href="/issues/05.html"><div class="issue break"><div class="no">05</div><div><div class="ti">Sniff the air</div><div class="de">Turn a £4 ESP32 into a Wi-Fi sniffer and hear what your devices are shouting.</div></div><div class="badge">break</div></div></a>
   </div>
-  <p style="color:var(--muted);font-size:13px;margin-top:18px;"><a href="/issues/00.html" style="color:var(--break)">Read issue #00 free →</a> &nbsp;·&nbsp; <a href="/issues/" style="color:var(--muted)">browse all issues</a> &nbsp;·&nbsp; <a href="/issues/text.html" style="color:var(--muted)">plain-text editions</a> &nbsp;·&nbsp; <a href="#join" style="color:var(--muted)">Want them delivered?</a></p>
+  <p style="color:var(--muted);font-size:13px;margin-top:18px;"><a href="/issues/00.html" style="color:var(--break)">Read issue #00 free →</a> &nbsp;·&nbsp; <a href="/issues/" style="color:var(--muted)">browse all issues</a> &nbsp;·&nbsp; <a href="/issues/text.html" style="color:var(--muted)">plain-text editions</a> &nbsp;·&nbsp; <a href="/feed.xml" style="color:var(--muted)">RSS feed</a></p>
 </div></section>
 
 <section class="manifesto"><div class="wrap">
@@ -233,85 +194,6 @@
       </ul>
     </div>
   </div>
-</div></section>
-
-<section id="join" class="join"><div class="wrap">
-  <p class="sec-eyebrow">// optional: have it come to you</p>
-  <h2>Can't be bothered<br><span class="make">checking</span> <span class="break">back?</span></h2>
-  <p class="sub">Everything lives on this site for free, no signup needed. If you'd rather not rely on remembering, leave your email and each new issue lands in your inbox. One click to leave. Prefer <a href="/feed.xml" style="color:var(--amber)">RSS</a>? That works too.</p>
-
-  <!-- Signup form, wired to Kit (ConvertKit) form #9954036. Subscribers land in your Kit list;
-       write each issue in Kit and hit Broadcast to send it. Field name is email_address (Kit's). -->
-  <form class="form" id="joinForm" action="https://app.kit.com/forms/9954036/subscriptions" method="post" novalidate>
-    <div class="form-row">
-      <span class="p">&gt;</span>
-      <input id="email" name="email_address" type="email" inputmode="email" autocomplete="email" required placeholder="you@machine.local" aria-label="Email address" />
-      <button type="submit" id="joinBtn">Send them ▚</button>
-    </div>
-    <div class="msg" id="msg" role="status" aria-live="polite">No spam, no slop. Unsubscribe in one click.</div>
-  </form>
-
-  <div class="modal-backdrop" id="joinModal" hidden>
-    <div class="term modal-term" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-      <div class="term-head">
-        <span class="tl r"></span><span class="tl y"></span><span class="tl g"></span>
-        <span class="term-title">~/welcome</span>
-      </div>
-      <div class="term-body">
-        <p class="lead" id="mTitle" style="margin-bottom:14px"><span class="prompt">&gt;</span> <span class="gp">you're on the list.</span><span class="cursor" style="height:.8em"></span></p>
-        <p class="c" style="margin-bottom:6px">Check your inbox for a confirm link and tap it. Meanwhile, <a href="/issues/" style="color:var(--break)">the whole back-catalogue is here</a>.</p>
-        <p style="margin:18px 0 12px"># know someone rotting in the scroll? drag them in:</p>
-        <div class="modal-actions">
-          <button type="button" class="btn" id="mCopy">Copy the link</button>
-          <button type="button" class="btn ghost" id="mClose">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-  (function(){
-    var FORM = "https://app.kit.com/forms/9954036/subscriptions";
-    var SITE = "https://makebreak.co.uk";
-    var f = document.getElementById('joinForm'),
-        b = document.getElementById('joinBtn'),
-        m = document.getElementById('msg'),
-        e = document.getElementById('email'),
-        modal = document.getElementById('joinModal'),
-        mClose = document.getElementById('mClose'),
-        mCopy = document.getElementById('mCopy');
-    function info(t){ m.textContent = t; m.style.color = "var(--muted)"; }
-    function er(t){ m.textContent = t; m.style.color = "var(--amber)"; }
-    function openModal(){ modal.hidden = false; document.body.style.overflow = 'hidden'; if(mClose) mClose.focus(); }
-    function closeModal(){ modal.hidden = true; document.body.style.overflow = ''; }
-    if(mClose) mClose.addEventListener('click', closeModal);
-    if(modal) modal.addEventListener('click', function(ev){ if(ev.target === modal) closeModal(); });
-    document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape' && modal && !modal.hidden) closeModal(); });
-    if(mCopy) mCopy.addEventListener('click', async function(){
-      function done(){ mCopy.textContent = "Copied ✓"; setTimeout(function(){ mCopy.textContent = "Copy the link"; }, 1800); }
-      try { await navigator.clipboard.writeText(SITE); done(); }
-      catch(_){
-        var t = document.createElement('input'); t.value = SITE; document.body.appendChild(t); t.select();
-        try { document.execCommand('copy'); done(); } catch(__){ mCopy.textContent = SITE; }
-        document.body.removeChild(t);
-      }
-    });
-    f.addEventListener('submit', async function(ev){
-      ev.preventDefault();
-      var email = (e.value || '').trim();
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ er("That doesn't look like an email. Try again."); e.focus(); return; }
-      b.disabled = true; info("Sending…");
-      try{
-        var fd = new FormData(); fd.append('email_address', email);
-        var r = await fetch(FORM, { method: "POST", headers: { "Accept": "application/json" }, body: fd });
-        var j = null; try { j = await r.json(); } catch(_){}
-        if(r.ok && (!j || j.status !== 'error')){ e.value = ''; info("No spam, no slop. Unsubscribe in one click."); openModal(); }
-        else { er("Hmm, that didn't take — give it another go?"); }
-      } catch(_){
-        f.submit(); return; // CORS/offline fallback: plain POST lands on Kit's own confirmation page
-      } finally { b.disabled = false; }
-    });
-  })();
-  </script>
 </div></section>
 
 <footer><div class="wrap">
